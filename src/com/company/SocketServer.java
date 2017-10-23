@@ -1,10 +1,8 @@
 package com.company;
-
 import Models.FoodItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.*;
 
@@ -73,7 +71,7 @@ public class SocketServer extends Thread {
         FoodItem i1 = new FoodItem(content, info);
         //FoodItem i2 = new FoodItem("chicken", "30|12|15|84");
         searchArray.put(i1.toString());
-        searchArray.put(i2.toString());
+        //searchArray.put(i2.toString());
         returnObject.put("search", searchArray.toString());
 
         return returnObject;
