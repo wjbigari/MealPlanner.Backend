@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.*;
 
 public class SocketServer extends Thread {
 
@@ -51,8 +52,26 @@ public class SocketServer extends Thread {
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
         //TODO - Yash - make query call, for each response add an object to searchArray
-        FoodItem i1 = new FoodItem(request, "22|11|31|15");
-        FoodItem i2 = new FoodItem("chicken", "30|12|15|84");
+        String content=null, info=null;
+        Statement stmt = null;
+        String query = "select contents, nutritionalinfo from ingredients where contents=request;";
+        try{
+                stmt = con.createStatemenr();
+                ResultSet rs = stmt.executeQuery(query);
+                 content = rs.getString("contents");
+                 info = rs.getString("nutritionalinfo");
+        }
+        catch(SQLException e){
+                JDBCTutorialUtilities.printSQLException(e);
+        }
+        finally{
+                if(stmt != null)
+                {
+                    stmt.close();
+                }
+        }
+        FoodItem i1 = new FoodItem(content, info);
+        //FoodItem i2 = new FoodItem("chicken", "30|12|15|84");
         searchArray.put(i1.toString());
         searchArray.put(i2.toString());
         returnObject.put("search", searchArray.toString());
