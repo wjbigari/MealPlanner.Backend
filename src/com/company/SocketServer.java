@@ -3,10 +3,13 @@ package com.company;
 import Models.FoodItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 public class SocketServer extends Thread {
 
@@ -36,6 +39,8 @@ public class SocketServer extends Thread {
 
         } catch (IOException ex) {
             System.out.println("Unable to get streams from client");
+        } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             try {
                 in.close();
@@ -47,22 +52,23 @@ public class SocketServer extends Thread {
         }
     }
 
-    private JSONObject getSearchQueryFromDatabase(String request){
+    private JSONObject getSearchQueryFromDatabase(String request) throws SQLException {
         JSONObject returnObject = new JSONObject();
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
         //TODO - Yash - make query call, for each response add an object to searchArray
         String content=null, info=null;
+        Connection con=null;
         Statement stmt = null;
         String query = "select contents, nutritionalinfo from ingredients where contents=request;";
         try{
-                stmt = con.createStatemenr();
+                stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
                  content = rs.getString("contents");
                  info = rs.getString("nutritionalinfo");
         }
         catch(SQLException e){
-                JDBCTutorialUtilities.printSQLException(e);
+                e.printStackTrace();
         }
         finally{
                 if(stmt != null)
@@ -73,7 +79,7 @@ public class SocketServer extends Thread {
         FoodItem i1 = new FoodItem(content, info);
         //FoodItem i2 = new FoodItem("chicken", "30|12|15|84");
         searchArray.put(i1.toString());
-        searchArray.put(i2.toString());
+       // searchArray.put(i2.toString());
         returnObject.put("search", searchArray.toString());
 
         return returnObject;
