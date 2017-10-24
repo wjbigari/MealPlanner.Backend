@@ -6,10 +6,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class SocketServer extends Thread {
 
@@ -41,6 +38,8 @@ public class SocketServer extends Thread {
             System.out.println("Unable to get streams from client");
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
         } finally {
             try {
                 in.close();
@@ -52,20 +51,27 @@ public class SocketServer extends Thread {
         }
     }
 
-    private JSONObject getSearchQueryFromDatabase(String request) throws SQLException {
+    private JSONObject getSearchQueryFromDatabase(String request) throws SQLException, ClassNotFoundException {
         JSONObject returnObject = new JSONObject();
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
         //TODO - Yash - make query call, for each response add an object to searchArray
         String content=null, info=null;
-        Connection con=null;
         Statement stmt = null;
-        String query = "select contents, nutritionalinfo from ingredients where contents=request;";
         try{
-                stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                 content = rs.getString("contents");
-                 info = rs.getString("nutritionalinfo");
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
+
+
+            String query = "select contents, nutritionalinfo from ingredients where contents LIKE '%" + request+ "%';";
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                content = rs.getString("contents");
+                info = rs.getString("nutritionalinfo");
+                FoodItem i1 = new FoodItem(content, info);
+                searchArray.put(i1.toString());
+            }
         }
         catch(SQLException e){
                 e.printStackTrace();
@@ -76,9 +82,9 @@ public class SocketServer extends Thread {
                     stmt.close();
                 }
         }
-        FoodItem i1 = new FoodItem(content, info);
+
         //FoodItem i2 = new FoodItem("chicken", "30|12|15|84");
-        searchArray.put(i1.toString());
+
        // searchArray.put(i2.toString());
         returnObject.put("search", searchArray.toString());
 

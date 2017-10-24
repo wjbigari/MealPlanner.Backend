@@ -19,5 +19,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="json-20170516" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.44-bin" level="project" />
   </component>
 </module>
