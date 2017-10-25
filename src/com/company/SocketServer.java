@@ -1,6 +1,7 @@
 package com.company;
 
-import Models.FoodItem;
+import Models.DBFoodItem;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -56,20 +57,24 @@ public class SocketServer extends Thread {
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
         //TODO - Yash - make query call, for each response add an object to searchArray
-        String content=null, info=null;
+        String content=null, info=null,sname=null,samount=null;
         Statement stmt = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
 
 
-            String query = "select contents, nutritionalinfo from ingredients where contents LIKE '%" + request+ "%';";
+            String query = "select contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '%" + request+ "%';";
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 content = rs.getString("contents");
                 info = rs.getString("nutritionalinfo");
-                FoodItem i1 = new FoodItem(content, info);
+                samount = rs.getString("minservamt");
+                sname = rs.getString("servingname");
+
+                DBFoodItem i1 = new DBFoodItem(content, info, samount, sname);
+                System.out.println(i1.toString());
                 searchArray.put(i1.toString());
             }
         }
