@@ -1,14 +1,14 @@
-package controllers;
+package MealPlanner;
 
 import java.util.ArrayList;
 
 import org.json.JSONException;
 
-import models.Constraints;
-import models.FoodItem;
-import models.MealItem;
-import models.MealPlannerRequest;
-import models.MealPlannerRec;
+import Models.Constraints;
+import Models.FoodItem;
+import Models.MealItem;
+import Models.MealPlannerRequest;
+import Models.MealPlannerRec;
 
 public class Driver {
 	

@@ -1,4 +1,4 @@
-package models;
+package Models;
 
 import org.json.JSONException;
 import org.json.JSONObject;

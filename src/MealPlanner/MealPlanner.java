@@ -1,12 +1,13 @@
-package controllers;
+package MealPlanner;
 
 import java.util.ArrayList;
 
-import models.Constraints;
-import models.FoodItem;
-import models.MealItem;
-import models.MealPlannerRec;
-import models.MealPlannerRequest;
+import Models.Constraints;
+import Models.FoodItem;
+import Models.MealItem;
+import Models.MealPlannerRec;
+import Models.MealPlannerRequest;
+
 
 public class MealPlanner {
 

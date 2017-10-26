@@ -5,6 +5,7 @@ import Models.DBFoodItem;
 import Models.FoodItem;
 import Models.MealItem;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -43,6 +44,8 @@ public class SocketServer extends Thread {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
+        } catch (JSONException e) {
+        	e.printStackTrace();
         } finally {
             try {
                 in.close();
