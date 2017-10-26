@@ -45,7 +45,7 @@ public class MealPlannerRequest {
 		return out;
 	}
 	
-	public void fromJson(JSONObject in){
+	public void fromJson(JSONObject in) throws JSONException{
 		JSONArray items = in.optJSONArray("mealItems");
 		mealItems.clear();
 		for(int i = 0; i < items.length(); i++){

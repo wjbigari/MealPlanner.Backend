@@ -34,7 +34,7 @@ public class MealPlannerRec {
 		}
 	}
 	//Constructor with provided JSON will convert that JSON into a MealPlannerRec instance
-	public MealPlannerRec(JSONObject recJson){
+	public MealPlannerRec(JSONObject recJson) throws JSONException{
 		this();
 		this.fromJson(recJson);
 	}
@@ -80,7 +80,7 @@ public class MealPlannerRec {
 		return out;
 	}
 	
-	public void fromJson(JSONObject in){
+	public void fromJson(JSONObject in) throws JSONException{
 		this.breakfastItems.clear();
 		this.lunchItems.clear();
 		this.dinnerItems.clear();
