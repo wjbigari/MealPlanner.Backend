@@ -1,6 +1,7 @@
 package Models;
 
 
+import org.json.JSONObject;
 
 public class Constraints {
 	//Fields for constraints set by the user; all nutrient fields are to be stored as Calories, not as Grams
@@ -34,6 +35,16 @@ public class Constraints {
 		maxProt = -1;
 		minFat = -1;
 		maxFat = -1;
+	}
+	public Constraints(JSONObject jc){
+		minCals = jc.getInt("minCals");
+		maxCals = jc.getInt("maxCals");
+		minCarbs = jc.getInt("minCarbs");
+		maxCarbs = jc.getInt("maxCals");
+		minProt = jc.getInt("minProt");
+		maxProt = jc.getInt("maxProt");
+		minFat = jc.getInt("minFat");
+		maxFat = jc.getInt("maxFat");
 	}
 
 	//Getters
@@ -103,4 +114,16 @@ public class Constraints {
 	}
 	
 	//TODO: Set up JSON serialization/deserialization functions
+	public JSONObject toJSON(){
+		JSONObject rj = new JSONObject();
+		rj.put("minCals", minCals);
+		rj.put("maxCals", maxCals);
+		rj.put("minCarbs", minCarbs);
+		rj.put("maxCarbs", maxCarbs);
+		rj.put("minProt", minProt);
+		rj.put("maxProt", maxProt);
+		rj.put("minFat", minFat);
+		rj.put("maxFat", maxFat);
+		return rj;
+	}
 }

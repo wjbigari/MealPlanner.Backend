@@ -30,10 +30,10 @@ public class FoodItem {
 		this.gramsFatPerServing = fat;
 	}
 	public FoodItem(){
-		this.name = "";
+		this.name = "default";
 		this.foodId = -1;
 		this.servingValue = -1;
-		this.servingUnit = "";
+		this.servingUnit = "default";
 		this.calPerServing = -1;
 		this.gramsCarbPerServing = -1;
 		this.gramsProtPerServing = -1;
