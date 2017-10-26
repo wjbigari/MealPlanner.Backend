@@ -54,7 +54,7 @@ public class SocketServer extends Thread {
         }
     }
 
-    private JSONObject getSearchQueryFromDatabase(String request) throws SQLException, ClassNotFoundException {
+    private JSONObject getSearchQueryFromDatabase(String request) throws SQLException, ClassNotFoundException, JSONException {
         JSONObject returnObject = new JSONObject();
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
@@ -86,7 +86,7 @@ public class SocketServer extends Thread {
                 i1.setFoodId(id);
                 i1.setServingValue(Integer.parseInt(samount));
                 i1.setServingUnit(sname);
-                JSONObject obj1 = i1.toJSON();
+                JSONObject obj1 = i1.toJson();
                 System.out.println(i1.toString());
                 searchArray.put(obj1.toString());
             }

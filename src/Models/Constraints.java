@@ -1,6 +1,7 @@
-package Models;
+package models;
 
-
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Constraints {
 	//Fields for constraints set by the user; all nutrient fields are to be stored as Calories, not as Grams
@@ -24,16 +25,14 @@ public class Constraints {
 		minFat = fatMin;
 		maxFat = fatMax;
 	}
-	//No-arg constructor sets all fields to an invalid state (-1); when using this constructor any fields used must be set via Setter methods
+	//No-arg constructor sets all fields to 0; when using this constructor any fields used must be set via Setter methods
 	public Constraints(){
-		minCals = -1;
-		maxCals = -1;
-		minCarbs = -1;
-		maxCarbs = -1;
-		minProt = -1;
-		maxProt = -1;
-		minFat = -1;
-		maxFat = -1;
+		this(0, 0, 0, 0, 0, 0, 0, 0);
+	}
+	//Constructor for creating a new constraints list out of a JSON Object
+	public Constraints(JSONObject constraintsJson){
+		this();
+		this.fromJson(constraintsJson);
 	}
 
 	//Getters
@@ -102,5 +101,28 @@ public class Constraints {
 		this.maxFat = maxFat;
 	}
 	
-	//TODO: Set up JSON serialization/deserialization functions
+	//JSON serialization and de-serialization functions
+	public JSONObject toJson() throws JSONException{
+		JSONObject out = new JSONObject();
+		out.put("minCals", this.getMinCals());
+		out.put("maxCals", this.getMaxCals());
+		out.put("minCarbs", this.getMinCarbs());
+		out.put("maxCarbs", this.getMaxCarbs());
+		out.put("minProt", this.getMinProt());
+		out.put("maxProt", this.getMaxProt());
+		out.put("minFat", this.getMinFat());
+		out.put("maxFat", this.getMaxFat());
+		return out;
+	}
+	
+	public void fromJson(JSONObject in){
+		this.setMinCals(in.optInt("minCals"));
+		this.setMaxCals(in.optInt("maxCals"));
+		this.setMinCarbs(in.optInt("minCarbs"));
+		this.setMaxCarbs(in.optInt("maxCarbs"));
+		this.setMinProt(in.optInt("minProt"));
+		this.setMaxProt(in.optInt("maxProt"));
+		this.setMinFat(in.optInt("minFat"));
+		this.setMaxFat(in.optInt("maxFat"));
+	}
 }

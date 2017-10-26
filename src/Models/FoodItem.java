@@ -1,6 +1,6 @@
-package Models;
+package models;
 
-
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class FoodItem {
@@ -17,7 +17,6 @@ public class FoodItem {
 	private int gramsFatPerServing;
 	private double internalCoefficient;
 
-
 	//Constructors - any fields that are not explicitly set will be set to default values
 	public FoodItem(String foodName, int id, int value, String unit, int cals, int carbs, int prot, int fat){
 		this.name = foodName;
@@ -30,15 +29,14 @@ public class FoodItem {
 		this.gramsFatPerServing = fat;
 	}
 	public FoodItem(){
-		this.name = "";
-		this.foodId = -1;
-		this.servingValue = -1;
-		this.servingUnit = "";
-		this.calPerServing = -1;
-		this.gramsCarbPerServing = -1;
-		this.gramsProtPerServing = -1;
-		this.gramsFatPerServing = -1;
+		this("", 0, 0, "", 0, 0, 0, 0);
 	}
+	//Constructor for use with a FoodItem encoded as a JSONObject
+	public FoodItem(JSONObject foodItemJson){
+		this();
+		this.fromJson(foodItemJson);
+	}
+	
 	public FoodItem(String foodName){
 		this();
 		this.name = foodName;
@@ -59,18 +57,6 @@ public class FoodItem {
 		this.gramsFatPerServing = fat;
 		this.gramsCarbPerServing = carbs;
 	}
-
-	public FoodItem(JSONObject fromObject){
-	    this.name = fromObject.getString("name");
-        this.foodId = fromObject.getInt("foodId");
-        this.servingValue = fromObject.getInt("servingValue");
-        this.servingUnit = fromObject.getString("servingUnit");
-        this.calPerServing = fromObject.getInt("calPerServing");
-        this.gramsCarbPerServing = fromObject.getInt("gramsCarbPerServing");
-        this.gramsProtPerServing = fromObject.getInt("gramsProtPerServing");
-        this.gramsFatPerServing = fromObject.getInt("gramsFatPerServing");
-        this.internalCoefficient = fromObject.getDouble("internalCoefficient");
-    }
 
 	//Getters
 	public String getName() {
@@ -152,18 +138,28 @@ public class FoodItem {
 	public int getCalsFatPerServing(){return this.getGramsFatPerServing() * 9;}
 	public String getServingSize(){return this.getServingValue() + " " + this.getServingUnit();}
 
-
-    public JSONObject toJSON(){
-	    JSONObject returnObject = new JSONObject();
-	    returnObject.put("name", this.name);
-        returnObject.put("foodId", this.foodId);
-        returnObject.put("servingValue", this.servingValue);
-        returnObject.put("servingUnit", this.servingUnit);
-        returnObject.put("calPerServing", this.calPerServing);
-        returnObject.put("gramsCarbPerServing", this.gramsCarbPerServing);
-        returnObject.put("gramsFatPerServing", this.gramsFatPerServing);
-        returnObject.put("gramsProtPerServing", this.gramsProtPerServing);
-        returnObject.put("internalCoefficient", this.internalCoefficient);
-        return returnObject;
-    }
+	//JSON serialization and de-serialization functions
+	public JSONObject toJson() throws JSONException{
+		JSONObject out = new JSONObject();
+		out.put("name", this.getName());
+		out.put("foodId", this.getFoodId());
+		out.put("servingValue", this.getServingValue());
+		out.put("servingUnit", this.getServingUnit());
+		out.put("calPerServing", this.getCalPerServing());
+		out.put("gramsCarbPerServing", this.getGramsCarbPerServing());
+		out.put("gramsProtPerServing", this.getGramsProtPerServing());
+		out.put("gramsFatPerServing", this.getGramsFatPerServing());
+		return out;
+	}
+	
+	public void fromJson(JSONObject in){
+		this.setName(in.optString("name"));
+		this.setFoodId(in.optInt("foodId"));
+		this.setServingValue(in.optInt("servingValue"));
+		this.setServingUnit(in.optString("servingUnit"));
+		this.setCalPerServing(in.optInt("calPerServing"));
+		this.setGramsCarbPerServing(in.optInt("gramsCarbPerServing"));
+		this.setGramsProtPerServing(in.optInt("gramsProtPerServing"));
+		this.setGramsFatPerServing(in.optInt("gramsFatPerServing"));
+	}
 }

@@ -1,44 +1,76 @@
-package MealPlanner;
-
-
-
-import Models.Constraints;
-import Models.FoodItem;
-import Models.MealItem;
+package controllers;
 
 import java.util.ArrayList;
 
+import models.Constraints;
+import models.FoodItem;
+import models.MealItem;
+import models.MealPlannerRec;
+import models.MealPlannerRequest;
+
 public class MealPlanner {
 
-	//TODO: Change the return type to a JSON-formatted String
-	public ArrayList<MealItem> createMealPlan(ArrayList<MealItem> mealItems, Constraints constraints){
-		ArrayList<MealItem> finalItems = new ArrayList<>();
+	//MAIN HANDLER -- All MealPlannerRequest processing should be run through this function
+	public static MealPlannerRec createMealPlan(MealPlannerRequest request) throws InterruptedException{
+		MealPlannerRec result = new MealPlannerRec();
 
 		//1. Iterate over the MealItems, identify Locked items with a set quantity, move them to the final list and adjust the Constraints
-		for(MealItem item : mealItems){
+		for(MealItem item : request.getMealItems()){
 			if(item.isLocked() && item.getNumServings() > 0){
-				adjustConstraints(item, constraints);
-				mealItems.remove(item);
-				finalItems.add(item);
+				adjustConstraints(item, request.getConstraints());
+				request.getMealItems().remove(item);
+				result.addItemToRec(item);
 			}
 		}
-		//2. TODO: Refactor out the fitness function and instead use a Factory class to build one dynamically using the contents of the Constraints
+		//2. TODO: Refactor out the fitness function and instead use a Factory class to build one using the contents of the Constraints
 
 
-		//3. TODO: Send a request over to the main algorithm using the adjusted list of MealItems and the adjusted Constraints
+		//3. Send the Request's adjusted Constraints and list of MealItems to the main algorithm, get back the adjusted counts
+		ArrayList<MealItem> output = selectMeals(request.getConstraints(), request.getMealItems());
+		output = consolidateResults(output);
 
-
-		//4. Iterate over the MealItems, identify all items with a non-zero quantity, and move them to the final list
-		for(MealItem item : mealItems){
-			if(item.getNumServings() > 0){
-				finalItems.add(item);
+		//4. Iterate over the algorithm output list and add non-zero quantity items to the final MealPlannerRec
+		for(MealItem item : output){
+			result.addItemToRec(item);
+		}
+		
+		return result;
+	}
+	
+	//Helper method for use with the first step of the Meal Planner request handling - for each field of the Constraints, if that field
+	// has a positive value, reduce it by the number of servings specified for the Locked item multiplied by the Locked item's corresponding field value
+	private static void adjustConstraints(MealItem mealItem, Constraints constraints){
+		if(constraints.getMinCals() > 0) constraints.setMinCals(Math.max(constraints.getMinCals() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalPerServing()), 0));
+		if(constraints.getMaxCals() > 0) constraints.setMaxCals(Math.max(constraints.getMaxCals() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalPerServing()), 0));
+		if(constraints.getMinCarbs() > 0) constraints.setMinCarbs(Math.max(constraints.getMinCarbs() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsCarbPerServing()), 0));
+		if(constraints.getMaxCarbs() > 0) constraints.setMaxCarbs(Math.max(constraints.getMaxCarbs() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsCarbPerServing()), 0));
+		if(constraints.getMinProt() > 0) constraints.setMinProt(Math.max(constraints.getMinProt() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsProtPerServing()), 0));
+		if(constraints.getMaxProt() > 0) constraints.setMaxProt(Math.max(constraints.getMaxProt() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsProtPerServing()), 0));
+		if(constraints.getMinFat() > 0) constraints.setMinFat(Math.max(constraints.getMinFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsFatPerServing()), 0));
+		if(constraints.getMaxFat() > 0) constraints.setMaxFat(Math.max(constraints.getMaxFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsFatPerServing()), 0));
+	}
+	
+	//Helper method which collapses down the results of the algorithm run from a list of individual items into a list of unique MealItems and quantities
+	private static ArrayList<MealItem> consolidateResults(ArrayList<MealItem> input){
+		ArrayList<MealItem> result = new ArrayList<>();
+		boolean match = false;
+		for(MealItem inputItem : input){
+			match = false;
+			for(MealItem resultsItem : result){
+				if(resultsItem.getFoodItem().getFoodId() == inputItem.getFoodItem().getFoodId() && resultsItem.getMeal().equals(inputItem.getMeal())){
+					resultsItem.setNumServings(resultsItem.getNumServings() + 1);
+					match = true;
+				}
+			}
+			if(!match){
+				inputItem.setNumServings(1);
+				result.add(inputItem);
 			}
 		}
-		//5. TODO: Serialize the finalItems list into JSON format before returning
-		return finalItems;
+		return result;
 	}
 
-	public MealItem[] createMealArray(ArrayList<MealItem> meal) {
+	public static MealItem[] createMealArray(ArrayList<MealItem> meal) {
 		MealItem[] ret = new MealItem[meal.size()];
 		for (int i = 0 ; i < meal.size(); i++) {
 			ret[i] = meal.get(i);
@@ -46,7 +78,7 @@ public class MealPlanner {
 		return ret;
 	}
 
-	public ArrayList<MealItem> selectMeals(Constraints c, ArrayList<MealItem> meal_Items) throws InterruptedException{
+	public static ArrayList<MealItem> selectMeals(Constraints c, ArrayList<MealItem> meal_Items) throws InterruptedException{
 		MealItem[] items = createMealArray(meal_Items);
 
 //		int iterations = 0;
@@ -89,7 +121,7 @@ public class MealPlanner {
 		return getBestDish(results,c); //Return the best Dish out of all runs
 	}
 
-	public ArrayList<MealItem> getRandomNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
+	public static ArrayList<MealItem> getRandomNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
 		int totalCals = updateTotalCals(meal);
 		if ((Math.random() > 0.5 || totalCals > c.getMinCals()) && items.length > 1) {
 			MealItem m = meal.get(0);
@@ -102,7 +134,8 @@ public class MealPlanner {
 		return meal;
 	}
 
-	public void printMeal(Constraints c, ArrayList<MealItem> meal) {
+	//N.B. - Leaving this in here to help with debugging; now deprecated by serialization functions
+	public static void printMeal(Constraints c, ArrayList<MealItem> meal) {
 		System.out.println("{");
 		ArrayList<Integer> countItems = new ArrayList<>();
 		ArrayList<String> foods = new ArrayList<>();
@@ -130,21 +163,21 @@ public class MealPlanner {
 		System.out.println("}");
 	}
 
-	private int getTotalFat(ArrayList<MealItem> meal) {
+	private static int getTotalFat(ArrayList<MealItem> meal) {
 		int total = 0;
 		for (int i = 0; i < meal.size(); i++) {
 			total += meal.get(i).getFoodItem().getGramsFatPerServing();
 		}
 		return total;
 	}
-	private int getTotalProtein(ArrayList<MealItem> meal) {
+	private static int getTotalProtein(ArrayList<MealItem> meal) {
 		int total = 0;
 		for (int i = 0; i < meal.size(); i++) {
 			total += meal.get(i).getFoodItem().getGramsProtPerServing();
 		}
 		return total;
 	}
-	private int getTotalCarbs(ArrayList<MealItem> meal) {
+	private static int getTotalCarbs(ArrayList<MealItem> meal) {
 		int total = 0;
 		for (int i = 0; i < meal.size(); i++) {
 			total += meal.get(i).getFoodItem().getGramsCarbPerServing();
@@ -153,7 +186,7 @@ public class MealPlanner {
 	}
 
 	@SuppressWarnings("unchecked")
-	private ArrayList<MealItem> getBestDish(ArrayList<Object> results, Constraints c) {
+	private static ArrayList<MealItem> getBestDish(ArrayList<Object> results, Constraints c) {
 		double best = 0;
 		int index = 0;
 		double score = 0;
@@ -168,8 +201,8 @@ public class MealPlanner {
 		return (ArrayList<MealItem>) results.get(index);
 	}
 
-	public ArrayList<MealItem> generateRandomMeal(MealItem[] items, Constraints c) {
-		ArrayList<MealItem> meal = new ArrayList();
+	public static ArrayList<MealItem> generateRandomMeal(MealItem[] items, Constraints c) {
+		ArrayList<MealItem> meal = new ArrayList<>();
 		//meal.clear();
 		int totalCals = 0;
 		while (totalCals < c.getMinCals()) {
@@ -180,8 +213,8 @@ public class MealPlanner {
 	}
 
 	//Meal Plan selector helper method
-	private ArrayList<MealItem> getBestNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
-		//Gets best neighbor but prioritizes adding a food item, to remove the possiblity of endless looping with very few items
+	private static ArrayList<MealItem> getBestNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
+		//Gets best neighbor but prioritizes adding a food item, to remove the possibility of endless looping with very few items
 		MealItem best = items[0];
 		boolean added = false;
 		int totalCals = 0;
@@ -225,7 +258,7 @@ public class MealPlanner {
 		return meal;
 	}
 
-	private int updateTotalCals(ArrayList<MealItem> meal) {
+	private static int updateTotalCals(ArrayList<MealItem> meal) {
 		int totalCals = 0;
 		for (int i = 0; i < meal.size(); i++) {
 			totalCals += meal.get(i).getFoodItem().getCalPerServing();
@@ -233,7 +266,7 @@ public class MealPlanner {
 		return totalCals;
 	}
 
-	public double getDishFitness(ArrayList<MealItem> meal, Constraints c) {
+	public static double getDishFitness(ArrayList<MealItem> meal, Constraints c) {
 		FoodItem dish = new FoodItem("Dish1", 0, 0, 0, 0);
 		for (int i = 0; i < meal.size(); i++) {
 			dish.setCalPerServing(dish.getCalPerServing() + meal.get(i).getFoodItem().getCalPerServing());
@@ -249,7 +282,7 @@ public class MealPlanner {
 		return ret;
 	}
 
-	private double getFoodFitness(FoodItem food, Constraints c) {
+	private static double getFoodFitness(FoodItem food, Constraints c) {
 		double fatFitness = food.getCalsFatPerServing() / (double)food.getCalPerServing();
 		double proteinFitness = food.getCalsProtPerServing() / (double)food.getCalPerServing();
 		double carbFitness = food.getCalsCarbPerServing() / (double)food.getCalPerServing();
@@ -272,7 +305,7 @@ public class MealPlanner {
 		return fitnessTotal;
 	}
 
-	public int countElement(ArrayList<MealItem> meal, MealItem elem){
+	public static int countElement(ArrayList<MealItem> meal, MealItem elem){
 		int count = 0;
 		for (int i = 0 ; i < meal.size(); i++){
 			if (meal.get(i).getFoodItem().getName().equals(elem.getFoodItem().getName()))
@@ -281,7 +314,7 @@ public class MealPlanner {
 		return count;
 	}
 
-	public MealItem getPopularElement(ArrayList<MealItem> meal)
+	public static MealItem getPopularElement(ArrayList<MealItem> meal)
 	{
 	  if (meal.size() == 0) return null;
 	  int count = 1;
@@ -306,16 +339,4 @@ public class MealPlanner {
 	  return popular;
 	}
 
-	//Helper method for use with the first step of the Meal Planner request handling - for each field of the Constraints, if that field
-	// has a positive value, reduce it by the number of servings specified for the Locked item multiplied by the Locked item's corresponding field value
-	private void adjustConstraints(MealItem mealItem, Constraints constraints){
-		if(constraints.getMinCals() > 0) constraints.setMinCals(Math.max(constraints.getMinCals() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalPerServing()), 0));
-		if(constraints.getMaxCals() > 0) constraints.setMaxCals(Math.max(constraints.getMaxCals() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalPerServing()), 0));
-		if(constraints.getMinCarbs() > 0) constraints.setMinCarbs(Math.max(constraints.getMinCarbs() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsCarbPerServing()), 0));
-		if(constraints.getMaxCarbs() > 0) constraints.setMaxCarbs(Math.max(constraints.getMaxCarbs() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsCarbPerServing()), 0));
-		if(constraints.getMinProt() > 0) constraints.setMinProt(Math.max(constraints.getMinProt() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsProtPerServing()), 0));
-		if(constraints.getMaxProt() > 0) constraints.setMaxProt(Math.max(constraints.getMaxProt() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsProtPerServing()), 0));
-		if(constraints.getMinFat() > 0) constraints.setMinFat(Math.max(constraints.getMinFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsFatPerServing()), 0));
-		if(constraints.getMaxFat() > 0) constraints.setMaxFat(Math.max(constraints.getMaxFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsFatPerServing()), 0));
-	}
 }
