@@ -2,6 +2,8 @@ package com.company;
 
 import Models.DBFoodItem;
 
+import Models.FoodItem;
+import Models.MealItem;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -63,8 +65,8 @@ public class SocketServer extends Thread {
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
 
-
-            String query = "select contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '%" + request+ "%';";
+            int id;
+            String query = "select foodid,contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '%" + request+ "%';";
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -72,10 +74,21 @@ public class SocketServer extends Thread {
                 info = rs.getString("nutritionalinfo");
                 samount = rs.getString("minservamt");
                 sname = rs.getString("servingname");
+                id = rs.getInt("foodid");
+                String[] cInfo = info.split("\\|");
 
-                DBFoodItem i1 = new DBFoodItem(content, info, samount, sname);
+
+                FoodItem i1 = new FoodItem(content,
+                        Integer.parseInt(cInfo[0]),
+                        Integer.parseInt(cInfo[1]),
+                        Integer.parseInt(cInfo[2]),
+                        Integer.parseInt(cInfo[3]));
+                i1.setFoodId(id);
+                i1.setServingValue(Integer.parseInt(samount));
+                i1.setServingUnit(sname);
+                JSONObject obj1 = i1.toJSON();
                 System.out.println(i1.toString());
-                searchArray.put(i1.toString());
+                searchArray.put(obj1.toString());
             }
         }
         catch(SQLException e){
