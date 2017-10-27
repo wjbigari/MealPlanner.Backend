@@ -14,16 +14,20 @@ public class MealPlanner {
 	//MAIN HANDLER -- All MealPlannerRequest processing should be run through this function
 	public static MealPlannerRec createMealPlan(MealPlannerRequest request) throws InterruptedException{
 		MealPlannerRec result = new MealPlannerRec();
+		ArrayList<MealItem> adjustedItems = new ArrayList<>();
 
 		//1. Iterate over the MealItems, identify Locked items with a set quantity, move them to the final list and adjust the Constraints
 		for(MealItem item : request.getMealItems()){
 			if(item.isLocked() && item.getNumServings() > 0){
 				adjustConstraints(item, request.getConstraints());
-				request.getMealItems().remove(item);
 				result.addItemToRec(item);
+			}else{
+				adjustedItems.add(item);
 			}
 		}
-		//2. TODO: Refactor out the fitness function and instead use a Factory class to build one using the contents of the Constraints
+		request.setMealItems(adjustedItems);
+		
+		//2. TODO: Adjust the fitness function using the values of the Constraints
 
 
 		//3. Send the Request's adjusted Constraints and list of MealItems to the main algorithm, get back the adjusted counts
@@ -51,21 +55,20 @@ public class MealPlanner {
 		if(constraints.getMaxFat() > 0) constraints.setMaxFat(Math.max(constraints.getMaxFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getCalsFatPerServing()), 0));
 	}
 	
-	//Helper method which collapses down the results of the algorithm run from a list of individual items into a list of unique MealItems and quantities
+	//Helper method which collapses down a list of individual MealItems into a list of only the unique MealItems and their quantities
 	private static ArrayList<MealItem> consolidateResults(ArrayList<MealItem> input){
 		ArrayList<MealItem> result = new ArrayList<>();
 		boolean match = false;
 		for(MealItem inputItem : input){
 			match = false;
 			for(MealItem resultsItem : result){
-				if(resultsItem.getFoodItem().getFoodId() == inputItem.getFoodItem().getFoodId() && resultsItem.getMeal().equals(inputItem.getMeal())){
+				if(inputItem.equalFoodItemAndMeal(resultsItem)){
 					resultsItem.setNumServings(resultsItem.getNumServings() + 1);
 					match = true;
 				}
 			}
 			if(!match){
-				inputItem.setNumServings(1);
-				result.add(inputItem);
+				result.add(new MealItem(inputItem.getFoodItem(), inputItem.isLocked(), 1, inputItem.getMeal()));
 			}
 		}
 		return result;
