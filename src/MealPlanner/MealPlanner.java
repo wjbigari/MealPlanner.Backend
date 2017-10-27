@@ -82,22 +82,13 @@ public class MealPlanner {
 	public static ArrayList<MealItem> selectMeals(Constraints c, ArrayList<MealItem> meal_Items) throws InterruptedException{
 		MealItem[] items = createMealArray(meal_Items);
 
-//		int iterations = 0;
-//		while(true){
-//			if (iterations > 1024) break;
-//			breakfast = breakfast.getBestNeighbor(items, c);
-//			//breakfast.printMeal(c);
-//			//Thread.sleep(10);
-//			iterations++;
-//		}
-//		breakfast.printMeal(c);
 
 		ArrayList<Object> results = new ArrayList<Object>();
-		for(int i = 0; i < 30; i++){
+		for(int i = 0; i < 100; i++){
 			double temp = 1.0;
 			ArrayList<MealItem> currentDish = generateRandomMeal(items, c);
 			while(temp >= 0.05){
-				temp *= 0.97;
+				temp *= 0.98;
 				//Thread.sleep(30);
 				//Pick a random value [0...1] - if the random value is lower than the current temperature,
 				// switch the current dish to one of its neighbors randomly
@@ -124,6 +115,8 @@ public class MealPlanner {
 
 	public static ArrayList<MealItem> getRandomNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
 		int totalCals = updateTotalCals(meal);
+		if (meal.size() == 0)
+			meal.add(items[(int) (Math.random() * items.length)]);
 		if ((Math.random() > 0.5 || totalCals > c.getMinCals()) && items.length > 1) {
 			MealItem m = meal.get(0);
 			meal.remove(m);

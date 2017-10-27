@@ -16,6 +16,7 @@ public class FoodItem {
 	private int gramsCarbPerServing;
 	private int gramsProtPerServing;
 	private int gramsFatPerServing;
+	//Part of the balancing algorithm - not for use outside the MealPlanner
 	private double internalCoefficient;
 
 
