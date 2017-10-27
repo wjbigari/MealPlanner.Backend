@@ -4,11 +4,13 @@ package Models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 import static Models.MealItem.Meal.BREAKFAST;
 import static Models.MealItem.Meal.DINNER;
 import static Models.MealItem.Meal.LUNCH;
 
-public class MealItem {
+public class MealItem implements Serializable {
 	//Enumerable type to easily identify the meal this FoodItem is a part of
 	public enum Meal{BREAKFAST, LUNCH, DINNER}
 	//Fields for qualifying the FoodItem in context of the meal it's in
@@ -16,6 +18,11 @@ public class MealItem {
 	private boolean isLocked;
 	private int numServings;
 	private Meal meal;
+
+	@Override
+	public String toString(){
+		return foodItem.toString();
+	}
 
 	//Three available constructors - with the FoodItem and Meal specified; with both plus the Locked state; and with all fields specified
 	public MealItem(FoodItem food, MealItem.Meal meal){
@@ -32,24 +39,25 @@ public class MealItem {
 		this(food, locked, meal);
 		this.numServings = servings;
 	}
-    public MealItem(JSONObject fromObject) throws JSONException {
-	    String foodItemString = fromObject.getString("foodItem");
-	    this.foodItem = new FoodItem(new JSONObject(foodItemString));
-	    this.isLocked = fromObject.getBoolean("isLocked");
-	    this.numServings = fromObject.getInt("numServings");
-	    String mealString = fromObject.getString("meal");
-	    switch(mealString.toUpperCase()){
-            case "BREAKFAST":
-                this.meal = BREAKFAST;
-                break;
-            case "LUNCH":
-                this.meal = LUNCH;
-                break;
-            case "DINNER":
-                this.meal = DINNER;
-                break;
-        }
-    }
+	public MealItem(JSONObject fromObject) throws JSONException {
+		String foodItemString = fromObject.getString("foodItem");
+		this.foodItem = new FoodItem(new JSONObject(foodItemString));
+		this.isLocked = fromObject.getBoolean("isLocked");
+		this.numServings = fromObject.getInt("numServings");
+		String mealString = fromObject.getString("meal");
+		switch(mealString.toUpperCase()){
+			case "BREAKFAST":
+				this.meal = BREAKFAST;
+				break;
+			case "LUNCH":
+				this.meal = LUNCH;
+				break;
+			case "DINNER":
+				this.meal = DINNER;
+				break;
+		}
+
+	}
 	public MealItem() {
 		// TODO Auto-generated constructor stub
 	}
@@ -78,13 +86,21 @@ public class MealItem {
 		this.meal = meal;
 	}
 
-	//JSON serialization function
-    public JSONObject toJson() throws JSONException{
-	    JSONObject returnObject = new JSONObject();
-	    returnObject.put("foodItem", this.foodItem.toJson().toString());
-	    returnObject.put("enum", this.meal.name());
-	    returnObject.put("isLocked", this.isLocked);
-	    returnObject.put("numServings", this.numServings);
-	    return returnObject;
-    }
+	//TODO: Set up JSON serialization/deserialization functions
+	public JSONObject toJSON() throws JSONException {
+		JSONObject returnObject = new JSONObject();
+		returnObject.put("foodItem", this.foodItem.toJson().toString());
+		returnObject.put("meal", this.meal.name());
+		returnObject.put("isLocked", this.isLocked);
+		returnObject.put("numServings", this.numServings);
+		return returnObject;
+	}
+	public JSONObject toJson() throws JSONException{
+		JSONObject returnObject = new JSONObject();
+		returnObject.put("foodItem", this.foodItem.toJson().toString());
+		returnObject.put("enum", this.meal.name());
+		returnObject.put("isLocked", this.isLocked);
+		returnObject.put("numServings", this.numServings);
+		return returnObject;
+	}
 }

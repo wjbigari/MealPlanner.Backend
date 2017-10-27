@@ -61,7 +61,6 @@ public class SocketServer extends Thread {
         JSONObject returnObject = new JSONObject();
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request);
-        //TODO - Yash - make query call, for each response add an object to searchArray
         String content=null, info=null,sname=null,samount=null;
         Statement stmt = null;
         try{

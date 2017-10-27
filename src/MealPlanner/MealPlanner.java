@@ -116,7 +116,7 @@ public class MealPlanner {
 	public static ArrayList<MealItem> getRandomNeighbor(MealItem[] items, Constraints c, ArrayList<MealItem> meal) {
 		int totalCals = updateTotalCals(meal);
 		if (meal.size() == 0)
-			meal.add(items[(int) (Math.random() * items.length)]);
+			meal.add(items[(int) (Math.random() * items.length )]);
 		if ((Math.random() > 0.5 || totalCals > c.getMinCals()) && items.length > 1) {
 			MealItem m = meal.get(0);
 			meal.remove(m);

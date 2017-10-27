@@ -32,30 +32,30 @@ public class MealSocket extends Thread {
         start();
     }
     public void run() {
-
-        InputStream in = null;
+        BufferedReader in = null;
         OutputStream out = null;
         try {
             System.out.println("got here");
-            in = socket.getInputStream();
             out = socket.getOutputStream();
-            System.out.println("got here1");
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String requestLine;
-            System.out.println("got here2");
-            while(br.ready()){
-                requestLine = br.readLine();
-                System.out.println("got here2.25");
-                requestString+= requestLine;
-                System.out.println(requestLine);
-            };
+
+
+            in = new BufferedReader(new InputStreamReader(
+                    socket.getInputStream()));
+
+            requestString = in.readLine();
+
             System.out.println("got here3");
             System.out.println("JSON OBJECT RECEIVED");
+
+
+
             //parse object, grab constraints and mealItems JSON Objects
             System.out.println(requestString);
             mprequest = new MealPlannerRequest(new JSONObject(requestString));
             //call MealPlanner
             mprec = MealPlanner.createMealPlan(mprequest);
+            System.out.println("PLAN GENERATED");
+            System.out.println(mprec);
             responseString = mprec.toJson().toString();
             out.write(responseString.getBytes());
         } catch (IOException ex) {
