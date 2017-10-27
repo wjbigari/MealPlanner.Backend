@@ -63,15 +63,15 @@ public class FoodItem {
 	}
 
 	public FoodItem(JSONObject fromObject) throws JSONException{
-	    this.name = fromObject.getString("name");
-        this.foodId = fromObject.getInt("foodId");
-        this.servingValue = fromObject.getInt("servingValue");
-        this.servingUnit = fromObject.getString("servingUnit");
-        this.calPerServing = fromObject.getInt("calPerServing");
-        this.gramsCarbPerServing = fromObject.getInt("gramsCarbPerServing");
-        this.gramsProtPerServing = fromObject.getInt("gramsProtPerServing");
-        this.gramsFatPerServing = fromObject.getInt("gramsFatPerServing");
-        this.internalCoefficient = fromObject.getDouble("internalCoefficient");
+	    this.name = fromObject.optString("name");
+        this.foodId = fromObject.optInt("foodId");
+        this.servingValue = fromObject.optInt("servingValue");
+        this.servingUnit = fromObject.optString("servingUnit");
+        this.calPerServing = fromObject.optInt("calPerServing");
+        this.gramsCarbPerServing = fromObject.optInt("gramsCarbPerServing");
+        this.gramsProtPerServing = fromObject.optInt("gramsProtPerServing");
+        this.gramsFatPerServing = fromObject.optInt("gramsFatPerServing");
+        this.internalCoefficient = fromObject.optDouble("internalCoefficient");
     }
 
 	//Getters
@@ -167,5 +167,15 @@ public class FoodItem {
         returnObject.put("gramsProtPerServing", this.gramsProtPerServing);
         returnObject.put("internalCoefficient", this.internalCoefficient);
         return returnObject;
+    }
+    
+    //Equals override checks whether all relevant fields of this FoodItem object are the same as the FoodItem object passed in
+    @Override
+    public boolean equals(Object o){
+    	if(!(o instanceof FoodItem)) return false;
+    	FoodItem other = (FoodItem)o;
+    	return this.getName().equals(other.getName()) && this.getFoodId() == other.getFoodId() && this.getCalPerServing() == other.getCalPerServing()
+    			&& this.getGramsCarbPerServing() == other.getGramsCarbPerServing() && this.getGramsProtPerServing() == other.getGramsProtPerServing()
+    			&& this.getGramsFatPerServing() == other.getGramsFatPerServing() && this.getServingSize().equals(other.getServingSize());
     }
 }

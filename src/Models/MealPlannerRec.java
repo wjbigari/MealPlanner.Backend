@@ -6,6 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import Models.MealItem.Meal;
+
 public class MealPlannerRec {
 	private ArrayList<MealItem> breakfastItems;
 	private ArrayList<MealItem> lunchItems;
@@ -44,13 +46,13 @@ public class MealPlannerRec {
 		if(item.getNumServings() > 0){
 			switch(item.getMeal()){
 			case BREAKFAST:
-				breakfastItems.add(item);
+				breakfastItems.add(new MealItem(item.getFoodItem(), item.isLocked(), item.getNumServings(), Meal.BREAKFAST));
 				break;
 			case LUNCH:
-				lunchItems.add(item);
+				lunchItems.add(new MealItem(item.getFoodItem(), item.isLocked(), item.getNumServings(), Meal.LUNCH));
 				break;
 			case DINNER:
-				dinnerItems.add(item);
+				dinnerItems.add(new MealItem(item.getFoodItem(), item.isLocked(), item.getNumServings(), Meal.DINNER));
 				break;
 			}
 			totalCals += (item.getNumServings() * item.getFoodItem().getCalPerServing());
@@ -85,16 +87,22 @@ public class MealPlannerRec {
 		this.lunchItems.clear();
 		this.dinnerItems.clear();
 		JSONArray items = in.optJSONArray("breakfastItems");
-		for(int i = 0; i < items.length(); i++){
-			breakfastItems.add(new MealItem(items.optJSONObject(i)));
+		if(items != null){
+			for(int i = 0; i < items.length(); i++){
+				breakfastItems.add(new MealItem(items.optJSONObject(i)));
+			}
 		}
 		items = in.optJSONArray("lunchItems");
-		for(int i = 0; i < items.length(); i++){
-			lunchItems.add(new MealItem(items.optJSONObject(i)));
+		if(items != null){
+			for(int i = 0; i < items.length(); i++){
+				lunchItems.add(new MealItem(items.optJSONObject(i)));
+			}
 		}
-		 items = in.optJSONArray("dinnerItems");
-		for(int i = 0; i < items.length(); i++){
-			dinnerItems.add(new MealItem(items.optJSONObject(i)));
+		items = in.optJSONArray("dinnerItems");
+		if(items != null){
+			for(int i = 0; i < items.length(); i++){
+				dinnerItems.add(new MealItem(items.optJSONObject(i)));
+			}
 		}
 		this.totalCals = in.optInt("totalCals");
 		this.totalCarbs = in.optInt("totalCarbs");

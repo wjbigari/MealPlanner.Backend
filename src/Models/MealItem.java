@@ -33,11 +33,11 @@ public class MealItem {
 		this.numServings = servings;
 	}
     public MealItem(JSONObject fromObject) throws JSONException {
-	    String foodItemString = fromObject.getString("foodItem");
+	    String foodItemString = fromObject.optString("foodItem");
 	    this.foodItem = new FoodItem(new JSONObject(foodItemString));
-	    this.isLocked = fromObject.getBoolean("isLocked");
-	    this.numServings = fromObject.getInt("numServings");
-	    String mealString = fromObject.getString("meal");
+	    this.isLocked = fromObject.optBoolean("isLocked");
+	    this.numServings = fromObject.optInt("numServings");
+	    String mealString = fromObject.optString("meal");
 	    switch(mealString.toUpperCase()){
             case "BREAKFAST":
                 this.meal = BREAKFAST;
@@ -86,5 +86,17 @@ public class MealItem {
 	    returnObject.put("isLocked", this.isLocked);
 	    returnObject.put("numServings", this.numServings);
 	    return returnObject;
+    }
+    
+    //Equals override checks whether a MealItem contains the same fields as another food item
+    @Override
+    public boolean equals(Object o){
+    	if(!(o instanceof MealItem)) return false;
+    	MealItem other = (MealItem)o;
+    	return this.equalFoodItemAndMeal(other) && this.isLocked() == other.isLocked() && this.numServings == other.numServings;
+    }
+    //A similar check, but only checks whether the FoodItem and Meal are the same
+    public boolean equalFoodItemAndMeal(MealItem other){
+    	return this.getFoodItem().equals(other.getFoodItem()) && this.getMeal().compareTo(other.getMeal()) == 0;
     }
 }
