@@ -17,7 +17,7 @@ public class MealPlannerRequest {
 	public MealPlannerRequest(JSONObject mpRequestJson){
 		mealList = new ArrayList<>();
 		constraints = new Constraints();
-		
+		fromJson(mpRequestJson);
 	}
 	
 	//Getters
@@ -47,13 +47,13 @@ public class MealPlannerRequest {
 	
 	public void fromJson(JSONObject in) throws JSONException{
 		mealList.clear();
-		JSONArray items = in.optJSONArray("mealList");
+		JSONArray items = new JSONArray(in.getString("mealList"));
 		if(items != null){
 			for(int i = 0; i < items.length(); i++){
-				mealList.add(new MealItem(items.optJSONObject(i)));
+				mealList.add(new MealItem(new JSONObject(items.getString(i))));
 			}
 		}
-		JSONObject item = in.optJSONObject("constraints");
+		JSONObject item = new JSONObject(in.getString("constraints"));
 		if(item != null){
 			this.setConstraints(new Constraints(item));
 		}

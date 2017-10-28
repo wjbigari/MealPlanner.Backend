@@ -66,15 +66,24 @@ public class MealPlannerRec {
 	//JSON serialization and de-serialization functions
 	public JSONObject toJson() throws JSONException{
 		JSONObject out = new JSONObject();
-		for(MealItem item : this.breakfastItems){
-			out.accumulate("breakfastItems", item.toJson());
+		JSONArray breakfast = new JSONArray();
+		JSONArray lunch = new JSONArray();
+		JSONArray dinner = new JSONArray();
+
+		for(MealItem ml : this.breakfastItems){
+			breakfast.put(ml.toJson().toString());
 		}
-		for(MealItem item : this.lunchItems){
-			out.accumulate("lunchItems", item.toJson());
+		for(MealItem ml : this.lunchItems){
+			lunch.put(ml.toJson().toString());
 		}
-		for(MealItem item : this.dinnerItems){
-			out.accumulate("dinnerItems", item.toJson());
+		for(MealItem ml : this.dinnerItems){
+			dinner.put(ml.toJson().toString());
 		}
+
+
+		out.put("breakfastItems", breakfast.toString());
+		out.put("lunchItems", lunch.toString());
+		out.put("dinnerItems", dinner.toString());
 		out.put("totalCals", this.totalCals);
 		out.put("totalCarbs", this.totalCarbs);
 		out.put("totalProt", this.totalProt);

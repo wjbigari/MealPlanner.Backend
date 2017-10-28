@@ -1,21 +1,11 @@
 package com.company;
-
-import Models.Constraints;
-import Models.MealItem;
 import Models.MealPlannerRec;
 import Models.MealPlannerRequest;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 import MealPlanner.MealPlanner;
 
 public class MealSocket extends Thread {
@@ -47,8 +37,6 @@ public class MealSocket extends Thread {
             System.out.println("got here3");
             System.out.println("JSON OBJECT RECEIVED");
 
-
-
             //parse object, grab constraints and mealItems JSON Objects
             System.out.println(requestString);
             mprequest = new MealPlannerRequest(new JSONObject(requestString));
@@ -57,13 +45,14 @@ public class MealSocket extends Thread {
             System.out.println("PLAN GENERATED");
             System.out.println(mprec);
             responseString = mprec.toJson().toString();
+            System.out.println(mprec.toJson().toString(2));
             out.write(responseString.getBytes());
         } catch (IOException ex) {
             System.out.println("Unable to get streams from client");
         } catch (JSONException ex) {
         	ex.printStackTrace();
-        } catch (InterruptedException ex) {
-        	ex.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         } finally {
             try {
                 in.close();

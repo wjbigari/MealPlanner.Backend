@@ -13,11 +13,9 @@ public class DBFoodItem {
         this.servingName = servingName;
         this.servingAmount = servingAmount;
     }
-
     public String getName(){
         return name;
     }
-
     public String getInfo(){
         return info;
     }
