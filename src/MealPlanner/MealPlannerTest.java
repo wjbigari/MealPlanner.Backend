@@ -77,38 +77,79 @@ public class MealPlannerTest extends TestCase{
 	
 	public void testCals() throws InterruptedException{
 		for(int calLevel : cals){
-			this.setUpDesignPoint(calLevel, calLevel, -1, -1, -1, -1, -1, -1);
+			this.setUpDesignPoint(calLevel, calLevel, (calLevel/12), (calLevel/12), (calLevel/12), (calLevel/12), (calLevel/27), (calLevel/27));
 			this.verifyDesignPoint();
+		}
+	}
+	
+	public void testCalsOpen() throws InterruptedException{
+		for(int calLevel : cals){
 			this.setUpDesignPoint(calLevel, calLevel, 0, 0, 0, 0, 0, 0);
 			this.verifyDesignPoint();
 		}
 	}
 	
+	public void testCalsRange() throws InterruptedException{
+		this.setUpDesignPoint(loCal, hiCal, (loCal/12), (hiCal/12), (loCal/12), (hiCal/12), (loCal/27), (hiCal/27));
+		this.verifyDesignPoint();
+	}
+	
 	public void testCarbs() throws InterruptedException{
 		for(int carbLevel : carbs){
-			this.setUpDesignPoint(-1, -1, carbLevel, carbLevel, -1, -1, -1, -1);
+			this.setUpDesignPoint((carbLevel * 4), (carbLevel * 4), carbLevel, carbLevel, -1, -1, -1, -1);
 			this.verifyDesignPoint();
+
+		}		
+	}
+	
+	public void testCarbsOpen() throws InterruptedException{
+		for(int carbLevel : carbs){
 			this.setUpDesignPoint(0, 0, carbLevel, carbLevel, 0, 0, 0, 0);
 			this.verifyDesignPoint();
-		}		
+		}
+	}
+	
+	public void testCarbRange() throws InterruptedException{
+		this.setUpDesignPoint((loCarb * 4), (hiCarb * 4), loCarb, hiCarb, -1, -1, -1, -1);
+		this.verifyDesignPoint();
 	}
 	
 	public void testProt() throws InterruptedException{
 		for(int protLevel : prot){
-			this.setUpDesignPoint(-1, -1, -1, -1, protLevel, protLevel, -1, -1);
-			this.verifyDesignPoint();
-			this.setUpDesignPoint(0, 0, 0, 0, protLevel, protLevel, 0, 0);
+			this.setUpDesignPoint((protLevel * 4), (protLevel * 4), -1, -1, protLevel, protLevel, -1, -1);
 			this.verifyDesignPoint();
 		}		
 	}
 	
+	public void testProtOpen() throws InterruptedException{
+		for(int protLevel : prot){
+			this.setUpDesignPoint(0, 0, 0, 0, protLevel, protLevel, 0, 0);
+			this.verifyDesignPoint();
+		}
+	}
+	
+	public void testProtRange() throws InterruptedException{
+		this.setUpDesignPoint((loProt * 4), (hiProt * 4), -1, -1, loProt, hiProt, -1, -1);
+		this.verifyDesignPoint();
+	}
+	
 	public void testFat() throws InterruptedException{
 		for(int fatLevel : fat){
-			this.setUpDesignPoint(-1, -1, -1, -1, -1, -1, fatLevel, fatLevel);
-			this.verifyDesignPoint();
-			this.setUpDesignPoint(0, 0, 0, 0, 0, 0, fatLevel, fatLevel);
+			this.setUpDesignPoint((fatLevel * 9), (fatLevel * 9), -1, -1, -1, -1, fatLevel, fatLevel);
 			this.verifyDesignPoint();
 		}		
+	}
+	
+	public void testFatOpen() throws InterruptedException{
+		for(int fatLevel : fat){
+			this.setUpDesignPoint(0, 0, 0, 0, 0, 0, fatLevel, fatLevel);
+			this.verifyDesignPoint();
+		}
+	}
+	
+	public void testFatRange() throws InterruptedException{
+		this.setUpDesignPoint((loFat * 9), (hiFat * 9), -1, -1, -1, -1, loFat, hiFat);
+		this.verifyDesignPoint();
 	}
 	
 	//Helper method - sets up the MealPlannerRequest with the proper initial values for this design point
@@ -132,48 +173,49 @@ public class MealPlannerTest extends TestCase{
 		long startTime = System.currentTimeMillis();
 		response = MealPlanner.createMealPlan(request);
 		long endTime = System.currentTimeMillis();
-		assertTrue(endTime - startTime < 3000);
+		assertTrue("Test completed in " + (endTime - startTime) + " milliseconds, expected less than 3 seconds",
+				endTime - startTime < 3000);
 		if(request.getConstraints().getMinCals() > 0){
-			double minCalsGoal = request.getConstraints().getMinCals() * 0.95;
+			double minCalsGoal = request.getConstraints().getMinCals() * 0.95 - 10;
 			assertTrue("Total Cals " + response.getTotalCals() + ", expected greater than " + minCalsGoal,
 					response.getTotalCals() >= minCalsGoal);
 		}		
 		if(request.getConstraints().getMaxCals() != 0){
-			double maxCalsGoal = Math.abs(request.getConstraints().getMaxCals()) * 1.05;
+			double maxCalsGoal = Math.abs(request.getConstraints().getMaxCals()) * 1.05 + 10;
 			assertTrue("Total Cals " + response.getTotalCals() + ", expected less than " + maxCalsGoal,
 					response.getTotalCals() <= maxCalsGoal);
 		}
 		if(request.getConstraints().getMinCarbs() > 0){
-			double minCarbsGoal = request.getConstraints().getMinCarbs() * 0.95;
+			double minCarbsGoal = request.getConstraints().getMinCarbs() * 0.95 - 5;
 			assertTrue("Total Carbs " + response.getTotalCarbs() + ", expected greater than " + minCarbsGoal,
 					response.getTotalCarbs() >= minCarbsGoal);
 		}
 		if(request.getConstraints().getMaxCarbs() != 0){
-			double maxCarbsGoal = Math.abs(request.getConstraints().getMaxCarbs()) * 1.05;
+			double maxCarbsGoal = Math.abs(request.getConstraints().getMaxCarbs()) * 1.05 + 5;
 			assertTrue("Total Carbs " + response.getTotalCarbs() + ", expected less than " + maxCarbsGoal,
 					response.getTotalCarbs() <= maxCarbsGoal);
 		}
 		if(request.getConstraints().getMinProt() > 0){
-			double minProtGoal = request.getConstraints().getMinProt() * 0.95;
+			double minProtGoal = request.getConstraints().getMinProt() * 0.95 - 5;
 			assertTrue("Total Prot " + response.getTotalProt() + ", expected greater than " + minProtGoal,
 					response.getTotalProt() >= minProtGoal);
 		}
 		if(request.getConstraints().getMaxProt() != 0){
-			double maxProtGoal = Math.abs(request.getConstraints().getMaxProt()) * 1.05;
+			double maxProtGoal = Math.abs(request.getConstraints().getMaxProt()) * 1.05 + 5;
 			assertTrue("Total Prot " + response.getTotalProt() + ", expected less than " + maxProtGoal,
 					response.getTotalProt() <= maxProtGoal);
 		}
 		if(request.getConstraints().getMinFat() > 0){
-			double minFatGoal = request.getConstraints().getMinFat() * 0.95;
+			double minFatGoal = request.getConstraints().getMinFat() * 0.95 - 5;
 			assertTrue("Total Fat " + response.getTotalFat() + ", expected greater than " + minFatGoal,
 					response.getTotalFat() >= minFatGoal);
 		}
 		if(request.getConstraints().getMaxFat() != 0){
-			double maxFatGoal = Math.abs(request.getConstraints().getMaxFat()) * 1.05;
+			double maxFatGoal = Math.abs(request.getConstraints().getMaxFat()) * 1.05 + 5;
 			assertTrue("Total Fat " + response.getTotalFat() + ", expected less than " + maxFatGoal,
 					response.getTotalFat() <= maxFatGoal);
 		}
-		System.out.println("Completed Design Point successfully in " + (endTime - startTime) + " milliseconds - \n"
-				+ constraints.toString());
+		System.out.print("Completed Design Point successfully in " + (endTime - startTime) + " milliseconds - \n"
+				+ constraints.toString() + "\n\n");
 	}
 }
