@@ -41,6 +41,15 @@ public class MealPlannerRec {
 		this.fromJson(recJson);
 	}
 	
+	//Getters
+	public int getTotalCals(){return this.totalCals;}
+	public int getTotalCarbs(){return this.totalCarbs;}
+	public int getTotalProt(){return this.totalProt;}
+	public int getTotalFat(){return this.totalFat;}
+	public ArrayList<MealItem> getBreakfastItems(){return this.breakfastItems;}
+	public ArrayList<MealItem> getLunchItems(){return this.lunchItems;}
+	public ArrayList<MealItem> getDinnerItems(){return this.dinnerItems;}
+	
 	//Helper method for adding a MealItem to this MealPlanner recommendation
 	public void addItemToRec(MealItem item){
 		if(item.getNumServings() > 0){
