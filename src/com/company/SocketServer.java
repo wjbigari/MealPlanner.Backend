@@ -10,7 +10,12 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+//import com.mysql.jdbc.Driver;
 
 public class SocketServer extends Thread {
 
