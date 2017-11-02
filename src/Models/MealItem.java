@@ -33,7 +33,7 @@ public class MealItem {
 		this.numServings = servings;
 	}
     public MealItem(JSONObject fromObject) throws JSONException {
-	    String foodItemString = fromObject.optString("foodItem");
+	    String foodItemString = fromObject.optString("content");
 	    this.foodItem = new FoodItem(new JSONObject(foodItemString));
 	    this.isLocked = fromObject.optBoolean("isLocked");
 	    this.numServings = fromObject.optInt("numServings");
@@ -81,7 +81,7 @@ public class MealItem {
 	//JSON serialization function
     public JSONObject toJson() throws JSONException{
 	    JSONObject returnObject = new JSONObject();
-	    returnObject.put("foodItem", this.foodItem.toJson().toString());
+	    returnObject.put("content", this.foodItem.toJson().toString());
 	    returnObject.put("meal", this.meal.name());
 	    returnObject.put("isLocked", this.isLocked);
 	    returnObject.put("numServings", this.numServings);
