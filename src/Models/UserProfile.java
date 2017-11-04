@@ -18,7 +18,21 @@ public class UserProfile implements Serializable {
         this.weight = jobject.getInt("weight");
 
     }
-
+    public String getUsername(){
+        return this.username;
+    }
+    public String getName(){
+        return this.name;
+    }
+    public int getAge(){
+        return this.age;
+    }
+    public int getHeight(){
+        return this.height;
+    }
+    public int getWeight(){
+        return this.weight;
+    }
     public String getHeighString(){
         int feet = this.height/12;
         int inches = this.height % 12;
