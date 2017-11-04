@@ -23,7 +23,7 @@ public class UpdateUserOp extends DatabaseOp{
 
     private void createSuccessString() {
         this.returnObject = new JSONObject();
-        //TODO WILL - PUT SOMEMESSAGE HERE
+        //TODO WILL - PUT SOME MESSAGE HERE
         this.returnObject.put("response", "User Info Updated");
     }
 
