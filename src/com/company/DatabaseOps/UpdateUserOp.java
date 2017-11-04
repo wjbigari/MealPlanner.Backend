@@ -15,6 +15,7 @@ public class UpdateUserOp extends DatabaseOp{
 
     @Override
     public JSONObject performOp() throws SQLException {
+        getItems();
         toDatabase();
         createSuccessString();
         return this.returnObject;

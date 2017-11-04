@@ -16,7 +16,6 @@ public class UserProfile implements Serializable {
         this.age = jobject.getInt("age");
         this.height = jobject.getInt("height");
         this.weight = jobject.getInt("weight");
-
     }
     public String getUsername(){
         return this.username;
