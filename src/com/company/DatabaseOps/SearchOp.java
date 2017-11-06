@@ -24,7 +24,7 @@ public class SearchOp extends DatabaseOp{
             Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
 
             int id;
-            String query = "select foodid,contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '%" + request+ "%';";
+            String query = "select foodid,contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '" + request + "%';";
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
