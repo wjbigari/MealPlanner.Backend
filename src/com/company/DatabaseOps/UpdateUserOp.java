@@ -16,6 +16,7 @@ public class UpdateUserOp extends DatabaseOp{
 
     @Override
     public JSONObject performOp() throws SQLException {
+        System.out.println("preforming User Update");
         getItems();
         toDatabase();
         createSuccessString();
@@ -36,19 +37,20 @@ public class UpdateUserOp extends DatabaseOp{
         try {
             //Registering JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
-
             //Open a connection
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
-
+            stmt = con.createStatement();
             //executing update query for userprofile
             String query = "UPDATE userprofile " +
                     "SET name = '" + this.userProfile.getName() + "' , " +
                     "weight = '" + this.userProfile.getWeight() + "' ," +
                     "height = '" + this.userProfile.getHeight() + "' ," +
-                    "age = '" + this.userProfile.getAge() + "'  " +
+                    "age = '" + this.userProfile.getAge() + "' , gender = '" + this.userProfile.getGen().name() + "'  " +
                     "WHERE username = '" + this.userProfile.getUsername() + "';";
+            System.out.println(query);
 
             stmt.executeUpdate(query);
+            System.out.println(query);
             System.out.println("User record successfully updated");
 
             //executing update query for constraints
@@ -72,7 +74,7 @@ public class UpdateUserOp extends DatabaseOp{
             //finally block used to close resources
             try {
                 if (stmt != null)
-                    con.close();
+                    stmt.close();
             } catch (SQLException se) {
             }// do nothing
             try {

@@ -23,7 +23,6 @@ public class SocketServer extends Thread {
     protected SocketServer(Socket socket) {
         this.socket = socket;
         System.out.println("New client connected from " + socket.getInetAddress().getHostAddress());
-        System.out.println("For a Meal Item Search Request");
         start();
     }
 
@@ -71,6 +70,7 @@ public class SocketServer extends Thread {
 
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
+        System.out.println(jrequest.toString());
         switch(jrequest.getString("option")){
             case "search":
                 databaseOp = new SearchOp(jrequest);
@@ -79,6 +79,7 @@ public class SocketServer extends Thread {
                 databaseOp = new InsertUserOp(jrequest);
                 break;
             case "updateUser":
+                System.out.println("For a User Update");
                 databaseOp = new UpdateUserOp(jrequest);
                 break;
         }
