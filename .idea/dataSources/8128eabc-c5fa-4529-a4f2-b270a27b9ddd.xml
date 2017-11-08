@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataSource name="mealplanner@localhost">
+  <database-model serializer="dbm" rdbms="MYSQL" format-version="4.4">
+    <root id="1"/>
+    <schema id="2" parent="1" name="mealplanner">
+      <Current>1</Current>
+      <Visible>1</Visible>
+    </schema>
+    <schema id="3" parent="1" name="information_schema"/>
+    <schema id="4" parent="1" name="mysql"/>
+    <schema id="5" parent="1" name="performance_schema"/>
+    <schema id="6" parent="1" name="sakila"/>
+    <schema id="7" parent="1" name="sys"/>
+    <schema id="8" parent="1" name="test"/>
+    <schema id="9" parent="1" name="world"/>
+    <table id="10" parent="2" name="constraints"/>
+    <table id="11" parent="2" name="favtfood"/>
+    <table id="12" parent="2" name="favtrecipe"/>
+    <table id="13" parent="2" name="ingredients"/>
+    <table id="14" parent="2" name="mealhistory"/>
+    <table id="15" parent="2" name="mealhistoryitem"/>
+    <table id="16" parent="2" name="recipeitem"/>
+    <table id="17" parent="2" name="userprofile"/>
+    <table id="18" parent="2" name="userrecipe"/>
+    <column id="19" parent="10" name="username">
+      <Position>1</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="20" parent="10" name="mincals">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="21" parent="10" name="maxcals">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="22" parent="10" name="mincarbs">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="23" parent="10" name="maxcarbs">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="24" parent="10" name="minprot">
+      <Position>6</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="25" parent="10" name="maxprot">
+      <Position>7</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="26" parent="10" name="minfat">
+      <Position>8</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="27" parent="10" name="maxfat">
+      <Position>9</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="28" parent="10" name="fk_constraints_username">
+      <ColNames>username</ColNames>
+    </index>
+    <foreign-key id="29" parent="10" name="fk_constraints_username">
+      <ColNames>username</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userprofile</RefTableName>
+      <RefColNames>username</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="30" parent="11" name="username">
+      <Position>1</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="31" parent="11" name="foodid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="32" parent="11" name="fk_favtfood_foodid">
+      <ColNames>foodid</ColNames>
+    </index>
+    <index id="33" parent="11" name="fk_favtfood_username">
+      <ColNames>username</ColNames>
+    </index>
+    <foreign-key id="34" parent="11" name="fk_favtfood_username">
+      <ColNames>username</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userprofile</RefTableName>
+      <RefColNames>username</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="35" parent="11" name="fk_favtfood_foodid">
+      <ColNames>foodid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>ingredients</RefTableName>
+      <RefColNames>foodid</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="36" parent="12" name="username">
+      <Position>1</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="37" parent="12" name="recipeid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="38" parent="12" name="fk_favtrecipe_recipeid">
+      <ColNames>recipeid</ColNames>
+    </index>
+    <index id="39" parent="12" name="fk_favtrecipe_username">
+      <ColNames>username</ColNames>
+    </index>
+    <foreign-key id="40" parent="12" name="fk_favtrecipe_username">
+      <ColNames>username</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userprofile</RefTableName>
+      <RefColNames>username</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="41" parent="12" name="fk_favtrecipe_recipeid">
+      <ColNames>recipeid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userrecipe</RefTableName>
+      <RefColNames>recipeid</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <column id="42" parent="13" name="foodid">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="43" parent="13" name="contents">
+      <Position>2</Position>
+      <DataType>varchar(100)|0</DataType>
+    </column>
+    <column id="44" parent="13" name="cals">
+      <Position>3</Position>
+      <DataType>double|0</DataType>
+    </column>
+    <column id="45" parent="13" name="carbs">
+      <Position>4</Position>
+      <DataType>double|0</DataType>
+    </column>
+    <column id="46" parent="13" name="prots">
+      <Position>5</Position>
+      <DataType>double|0</DataType>
+    </column>
+    <column id="47" parent="13" name="fats">
+      <Position>6</Position>
+      <DataType>double|0</DataType>
+    </column>
+    <column id="48" parent="13" name="minservamt">
+      <Position>7</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="49" parent="13" name="nutritionalinfo">
+      <Position>8</Position>
+      <DataType>varchar(50)|0</DataType>
+    </column>
+    <column id="50" parent="13" name="servingname">
+      <Position>9</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
+    <column id="51" parent="13" name="api_id">
+      <Position>10</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <key id="52" parent="13" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>foodid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="53" parent="14" name="mealid">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="54" parent="14" name="username">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="55" parent="14" name="mealname">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="56" parent="14" name="date">
+      <Position>4</Position>
+      <DataType>date|0</DataType>
+    </column>
+    <column id="57" parent="14" name="mealtime">
+      <Position>5</Position>
+      <DataType>varchar(10)|0</DataType>
+    </column>
+    <index id="58" parent="14" name="username">
+      <ColNames>username</ColNames>
+    </index>
+    <key id="59" parent="14" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>mealid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="60" parent="14" name="mealhistory_ibfk_1">
+      <ColNames>username</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userprofile</RefTableName>
+      <RefColNames>username</RefColNames>
+    </foreign-key>
+    <column id="61" parent="15" name="mealid">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="62" parent="15" name="foodid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="63" parent="15" name="amount">
+      <Position>3</Position>
+      <DataType>float|0</DataType>
+    </column>
+    <index id="64" parent="15" name="foodid">
+      <ColNames>foodid</ColNames>
+    </index>
+    <index id="65" parent="15" name="mealid">
+      <ColNames>mealid</ColNames>
+    </index>
+    <foreign-key id="66" parent="15" name="mealhistoryitem_ibfk_1">
+      <ColNames>mealid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>mealhistory</RefTableName>
+      <RefColNames>mealid</RefColNames>
+    </foreign-key>
+    <foreign-key id="67" parent="15" name="mealhistoryitem_ibfk_2">
+      <ColNames>foodid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>ingredients</RefTableName>
+      <RefColNames>foodid</RefColNames>
+    </foreign-key>
+    <column id="68" parent="16" name="recipeid">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="69" parent="16" name="foodid">
+      <Position>2</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="70" parent="16" name="servingsoffooditem">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <index id="71" parent="16" name="fk_recipeitem_foodid">
+      <ColNames>foodid</ColNames>
+    </index>
+    <index id="72" parent="16" name="fk_recipeitem_recipeid">
+      <ColNames>recipeid</ColNames>
+    </index>
+    <foreign-key id="73" parent="16" name="fk_recipeitem_recipeid">
+      <ColNames>recipeid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userrecipe</RefTableName>
+      <RefColNames>recipeid</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+    <foreign-key id="74" parent="16" name="fk_recipeitem_foodid">
+      <ColNames>foodid</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>ingredients</RefTableName>
+      <RefColNames>foodid</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+    </foreign-key>
+    <column id="75" parent="17" name="username">
+      <Position>1</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="76" parent="17" name="name">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="77" parent="17" name="weight">
+      <Position>3</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="78" parent="17" name="height">
+      <Position>4</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <column id="79" parent="17" name="age">
+      <Position>5</Position>
+      <DataType>int(4)|0</DataType>
+    </column>
+    <key id="80" parent="17" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>username</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="81" parent="18" name="recipeid">
+      <Position>1</Position>
+      <DataType>int(11)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="82" parent="18" name="username">
+      <Position>2</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+    </column>
+    <column id="83" parent="18" name="recipename">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+    </column>
+    <column id="84" parent="18" name="recipe">
+      <Position>4</Position>
+      <DataType>varchar(2000)|0</DataType>
+    </column>
+    <column id="85" parent="18" name="peopletobeserved">
+      <Position>5</Position>
+      <DataType>int(11)|0</DataType>
+    </column>
+    <index id="86" parent="18" name="fk_userrecipe_username">
+      <ColNames>username</ColNames>
+    </index>
+    <key id="87" parent="18" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>recipeid</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <foreign-key id="88" parent="18" name="fk_userrecipe_username">
+      <ColNames>username</ColNames>
+      <RefSchemaName>mealplanner</RefSchemaName>
+      <RefTableName>userprofile</RefTableName>
+      <RefColNames>username</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
+    </foreign-key>
+  </database-model>
+</dataSource>
