@@ -57,7 +57,7 @@ public class SocketServer extends Thread {
         } finally {
             try {
                 String responseAsString = response.toString();
-                System.out.print("response object sent");
+                System.out.println("response object sent to "  + socket.getInetAddress().getHostAddress());
                 out.write(responseAsString.getBytes());
                 in.close();
                 out.close();
