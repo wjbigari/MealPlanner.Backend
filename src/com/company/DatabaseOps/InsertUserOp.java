@@ -44,8 +44,7 @@ public class InsertUserOp extends DatabaseOp {
             stmt = con.createStatement();
             String query = "INSERT INTO userprofile " +
                             "VALUES ('" + this.userProfile.getUsername() + "' , '"+ this.userProfile.getName() + "' , '" + this.userProfile.getWeight() + "' , " +
-                            " '" + this.userProfile.getHeight() +"' , '" + this.userProfile.getAge() + "', '" + this.userProfile.getGen().name() + "');";
-            System.out.println(query);
+                            " '" + this.userProfile.getHeight() +"' , '" + this.userProfile.getAge() +"');";
 
             stmt.executeUpdate(query);
             System.out.println("User info inserted");
@@ -53,7 +52,6 @@ public class InsertUserOp extends DatabaseOp {
             //executing insert query for user constraints
             query = "INSERT INTO constraints " +
                      "VALUES ('" + this.userProfile.getUsername() + "' , '" + this.constraints.getMinCals() +"' , '" + this.constraints.getMaxCals() + "'  , '" + this.constraints.getMinCarbs() + "' , '" + this.constraints.getMaxCarbs() + "' , '" + this.constraints.getMinProt() + "' , '" + this.constraints.getMaxProt() +"' , '" + this.constraints.getMinFat() +"' , '" + this.constraints.getMaxFat() +"');";
-            System.out.println(query);
             stmt.executeUpdate(query);
             System.out.println("User constraints inserted");
 

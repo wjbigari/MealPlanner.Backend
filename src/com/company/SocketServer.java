@@ -39,6 +39,7 @@ public class SocketServer extends Thread {
             DatabaseOp databaseOp = parseOperation(JSONRequest);
 
             if(databaseOp != null){
+                System.out.println("performing op");
                 response = databaseOp.performOp();
             }else{
                 response.put("response", "unknown request type.");
@@ -70,18 +71,19 @@ public class SocketServer extends Thread {
 
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
-        System.out.println(jrequest.toString());
         switch(jrequest.getString("option")){
-            case "search":
+            case "search":{
+                System.out.println("searching");
                 databaseOp = new SearchOp(jrequest);
-                break;
-            case "insertUser":
+                break;}
+            case "insertUser":{
+                System.out.println("inserting");
                 databaseOp = new InsertUserOp(jrequest);
-                break;
-            case "updateUser":
-                System.out.println("For a User Update");
+                break;}
+            case "updateUser":{
+                System.out.println("updating");
                 databaseOp = new UpdateUserOp(jrequest);
-                break;
+                break;}
         }
         return databaseOp;
     }
