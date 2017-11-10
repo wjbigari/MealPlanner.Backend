@@ -86,7 +86,8 @@ public class UpdateUserOp extends DatabaseOp{
 
     private void getItems(){
         this.userProfile = new UserProfile(new JSONObject(this.jobject.getString("userProfile")));
-        this.constraints = new Constraints(new JSONObject(this.jobject.getString("constraints")));
+        //this.constraints = new Constraints(new JSONObject(this.jobject.getString("constraints")));
+        this.constraints = this.userProfile.getConstraints();
     }
 
 }
