@@ -8,7 +8,12 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.Socket;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+//import com.mysql.jdbc.Driver;
 
 public class SocketServer extends Thread {
 
@@ -18,7 +23,6 @@ public class SocketServer extends Thread {
     protected SocketServer(Socket socket) {
         this.socket = socket;
         System.out.println("New client connected from " + socket.getInetAddress().getHostAddress());
-        System.out.println("For a Meal Item Search Request");
         start();
     }
 
@@ -35,6 +39,7 @@ public class SocketServer extends Thread {
             DatabaseOp databaseOp = parseOperation(JSONRequest);
 
             if(databaseOp != null){
+                System.out.println("performing op");
                 response = databaseOp.performOp();
             }else{
                 response.put("response", "unknown request type.");
@@ -53,7 +58,7 @@ public class SocketServer extends Thread {
         } finally {
             try {
                 String responseAsString = response.toString();
-                System.out.print("response object sent");
+                System.out.println("response object sent to "  + socket.getInetAddress().getHostAddress());
                 out.write(responseAsString.getBytes());
                 in.close();
                 out.close();
@@ -67,15 +72,18 @@ public class SocketServer extends Thread {
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
         switch(jrequest.getString("option")){
-            case "search":
+            case "search":{
+                System.out.println("searching");
                 databaseOp = new SearchOp(jrequest);
-                break;
-            case "insertUser":
+                break;}
+            case "insertUser":{
+                System.out.println("inserting");
                 databaseOp = new InsertUserOp(jrequest);
-                break;
-            case "updateUser":
+                break;}
+            case "updateUser":{
+                System.out.println("updating");
                 databaseOp = new UpdateUserOp(jrequest);
-                break;
+                break;}
         }
         return databaseOp;
     }

@@ -18,22 +18,29 @@ public class SearchOp extends DatabaseOp{
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request + ".");
         String content=null, info=null,sname=null,samount=null;
+        double cals,carbs,prots,fats;
         Statement stmt = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con= DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
 
             int id;
-            String query = "select foodid,contents, nutritionalinfo, minservamt, servingname from ingredients where contents LIKE '%" + request+ "%';";
+            String query = "select foodid,contents, cals,carbs,prots, fats, minservamt, servingname from ingredients where contents LIKE '" + request + "%' LIMIT 5;";
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
+                id = rs.getInt("foodid");
                 content = rs.getString("contents");
-                info = rs.getString("nutritionalinfo");
+                //info = rs.getString("nutritionalinfo");
+                cals = rs.getDouble("cals");
+                carbs = rs.getDouble("carbs");
+                prots = rs.getDouble("prots");
+                fats = rs.getDouble("fats");
                 samount = rs.getString("minservamt");
                 sname = rs.getString("servingname");
-                id = rs.getInt("foodid");
-                String[] cInfo = info.split("\\|");
+
+
+               String[] cInfo = info.split("\\|");
 
 
                 FoodItem i1 = new FoodItem(content,
@@ -48,6 +55,8 @@ public class SearchOp extends DatabaseOp{
                 JSONObject obj1 = i1.toJson();
                 System.out.println(i1.toString());
                 searchArray.put(obj1.toString());
+
+
             }
         }
         catch(SQLException e){
