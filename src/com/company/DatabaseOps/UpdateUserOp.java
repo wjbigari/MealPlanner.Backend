@@ -39,7 +39,7 @@ public class UpdateUserOp extends DatabaseOp{
 
             //Open a connection
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
-
+            stmt = con.createStatement();
             //executing update query for userprofile
             String query = "UPDATE userprofile " +
                     "SET name = '" + this.userProfile.getName() + "' , " +
