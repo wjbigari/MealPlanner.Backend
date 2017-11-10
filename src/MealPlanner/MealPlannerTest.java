@@ -1,14 +1,10 @@
 package MealPlanner;
 
-import java.util.ArrayList;
-
-import Models.Constraints;
-import Models.FoodItem;
-import Models.MealItem;
+import Models.*;
 import Models.MealItem.Meal;
-import Models.MealPlannerRec;
-import Models.MealPlannerRequest;
 import junit.framework.TestCase;
+
+import java.util.ArrayList;
 
 public class MealPlannerTest extends TestCase{
 	//Factors
