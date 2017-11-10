@@ -53,6 +53,7 @@ public class UpdateUserOp extends DatabaseOp{
             System.out.println("User record successfully updated");
 
             //executing update query for constraints
+            stmt = con.createStatement();
             query = "UPDATE constraints " +
                     "SET mincals = '" + this.constraints.getMinCals() + "' , maxcals = '" + this.constraints.getMaxCals() + "' , " +
                     "mincarbs = '" + this.constraints.getMinCarbs() + "' , maxcarbs = '" + this.constraints.getMaxCarbs() + "' , " +
