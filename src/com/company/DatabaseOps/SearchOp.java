@@ -17,8 +17,8 @@ public class SearchOp extends DatabaseOp{
         JSONObject returnObject = new JSONObject();
         JSONArray searchArray = new JSONArray();
         System.out.println("searching for request: " + request + ".");
-        String content=null, info=null,sname=null,samount=null;
-        double cals,carbs,prots,fats;
+        String content=null, info=null,sname=null;
+        double cals,carbs,prots,fats, samount;
         Statement stmt = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -36,22 +36,12 @@ public class SearchOp extends DatabaseOp{
                 carbs = rs.getDouble("carbs");
                 prots = rs.getDouble("prots");
                 fats = rs.getDouble("fats");
-                samount = rs.getString("minservamt");
+                samount = Double.parseDouble(rs.getString("minservamt"));
                 sname = rs.getString("servingname");
 
 
-               String[] cInfo = info.split("\\|");
-
-
-                FoodItem i1 = new FoodItem(content,
-                        Integer.parseInt(cInfo[0]),
-                        Integer.parseInt(cInfo[1]),
-                        Integer.parseInt(cInfo[2]),
-                        Integer.parseInt(cInfo[3]));
-                i1.setFoodId(id);
+                FoodItem i1 = new FoodItem(content, id, samount, sname, cals,carbs,prots, fats);
                 System.out.println("adding food item " + content + "to list.");
-                i1.setServingValue(Integer.parseInt(samount));
-                i1.setServingUnit(sname);
                 JSONObject obj1 = i1.toJson();
                 System.out.println(i1.toString());
                 searchArray.put(obj1.toString());

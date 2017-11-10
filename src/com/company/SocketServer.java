@@ -65,6 +65,8 @@ public class SocketServer extends Thread {
                 socket.close();
             } catch (IOException ex) {
                 ex.printStackTrace();
+            } catch(Exception e){
+                e.printStackTrace();
             }
         }
     }

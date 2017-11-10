@@ -25,7 +25,16 @@ public class FoodItem implements Serializable, MealItemContent{
 	public String toString(){
 		return this.name;
 	}
-
+	public FoodItem(String foodName, int id, double value, String unit, double cals, double carbs, double prot, double fat){
+		this.name = foodName;
+		this.foodId = id;
+		this.servingValue = value;
+		this.servingUnit = unit;
+		this.calPerServing = cals;
+		this.gramsCarbPerServing = carbs;
+		this.gramsProtPerServing = prot;
+		this.gramsFatPerServing = fat;
+	}
 
 	//Constructors - any fields that are not explicitly set will be set to default values
 	public FoodItem(String foodName, int id, int value, String unit, int cals, int carbs, int prot, int fat){
