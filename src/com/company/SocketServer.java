@@ -37,11 +37,12 @@ public class SocketServer extends Thread {
             request = br.readLine();
             JSONObject JSONRequest = new JSONObject(request);
             DatabaseOp databaseOp = parseOperation(JSONRequest);
-
+            response = new JSONObject();
             if(databaseOp != null){
                 System.out.println("performing op");
                 response = databaseOp.performOp();
             }else{
+                response = new JSONObject();
                 response.put("response", "unknown request type.");
                 System.out.println("Unknown request type.");
             }

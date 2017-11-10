@@ -54,7 +54,10 @@ public class SearchOp extends DatabaseOp{
             System.out.println("problem here");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-        } finally{
+        } catch(Exception e){
+            e.printStackTrace();
+
+        }finally{
             if(stmt != null)
             {
                 stmt.close();
