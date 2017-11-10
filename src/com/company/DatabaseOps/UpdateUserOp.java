@@ -45,7 +45,7 @@ public class UpdateUserOp extends DatabaseOp{
                     "SET name = '" + this.userProfile.getName() + "' , " +
                     "weight = '" + this.userProfile.getWeight() + "' ," +
                     "height = '" + this.userProfile.getHeight() + "' ," +
-                    "age = '" + this.userProfile.getAge() + "' , " +
+                    "age = '" + this.userProfile.getAge() + "' ," +
                     "gender = '" + this.userProfile.getGen() +"' " +
                     "WHERE username = '" + this.userProfile.getUsername() + "';";
 
@@ -53,7 +53,6 @@ public class UpdateUserOp extends DatabaseOp{
             System.out.println("User record successfully updated");
 
             //executing update query for constraints
-            stmt = con.createStatement();
             query = "UPDATE constraints " +
                     "SET mincals = '" + this.constraints.getMinCals() + "' , maxcals = '" + this.constraints.getMaxCals() + "' , " +
                     "mincarbs = '" + this.constraints.getMinCarbs() + "' , maxcarbs = '" + this.constraints.getMaxCarbs() + "' , " +
