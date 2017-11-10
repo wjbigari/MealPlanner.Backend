@@ -46,6 +46,7 @@ public class UpdateUserOp extends DatabaseOp{
                     "weight = '" + this.userProfile.getWeight() + "' ," +
                     "height = '" + this.userProfile.getHeight() + "' ," +
                     "age = '" + this.userProfile.getAge() + "'  " +
+                    "gender = '" + this.userProfile.getGen() +"' " +
                     "WHERE username = '" + this.userProfile.getUsername() + "';";
 
             stmt.executeUpdate(query);

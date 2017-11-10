@@ -44,7 +44,7 @@ public class InsertUserOp extends DatabaseOp {
             stmt = con.createStatement();
             String query = "INSERT INTO userprofile " +
                             "VALUES ('" + this.userProfile.getUsername() + "' , '"+ this.userProfile.getName() + "' , '" + this.userProfile.getWeight() + "' , " +
-                            " '" + this.userProfile.getHeight() +"' , '" + this.userProfile.getAge() +"');";
+                            " '" + this.userProfile.getHeight() +"' , '" + this.userProfile.getAge() +"' , '" + this.userProfile.getGen() + "');";
 
             stmt.executeUpdate(query);
             System.out.println("User info inserted");
