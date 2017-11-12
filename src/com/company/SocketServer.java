@@ -1,8 +1,5 @@
 package com.company;
-import com.company.DatabaseOps.DatabaseOp;
-import com.company.DatabaseOps.InsertUserOp;
-import com.company.DatabaseOps.SearchOp;
-import com.company.DatabaseOps.UpdateUserOp;
+import com.company.DatabaseOps.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -74,20 +71,30 @@ public class SocketServer extends Thread {
 
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
+        String consoleString = "Invalid request from ";
         switch(jrequest.getString("option")){
             case "search":{
-                System.out.println("searching");
+                consoleString = "performing food item search for ";
                 databaseOp = new SearchOp(jrequest);
                 break;}
             case "insertUser":{
-                System.out.println("inserting");
+                consoleString = "inserting User from ";
                 databaseOp = new InsertUserOp(jrequest);
                 break;}
             case "updateUser":{
-                System.out.println("updating");
+                consoleString = "updating User from ";
                 databaseOp = new UpdateUserOp(jrequest);
                 break;}
+            case "addRecipe":
+                consoleString = "adding recipe from ";
+                databaseOp = new SaveRecipesOp(jrequest);
+                break;
+            case "getRecipes":
+                consoleString = "getting recipes for ";
+                databaseOp = new GetRecipesOp(jrequest);
+                break;
         }
+        System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;
     }
 }
