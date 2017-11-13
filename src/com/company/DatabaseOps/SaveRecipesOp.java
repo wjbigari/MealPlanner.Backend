@@ -36,6 +36,7 @@ public class SaveRecipesOp extends DatabaseOp{
         Connection con = null;
         Statement stmt = null;
         try {
+            System.out.println("Trying to save user recipe");
             //Registering JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
 
