@@ -1,10 +1,16 @@
 package com.company.DatabaseOps;
 
 import Models.RecipeItem;
+import Models.FoodItem;
+import Models.RecipeItem;
 import Models.UserRecipe;
 import org.json.JSONObject;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SaveRecipesOp extends DatabaseOp{
@@ -16,23 +22,69 @@ public class SaveRecipesOp extends DatabaseOp{
         super(jObject);
         this.username = jObject.getString("username");
         this.userRecipe = new UserRecipe(jobject.getString("userRecipe"));
-
     }
     @Override
     public JSONObject performOp() throws SQLException {
 
-        try{
-            updateDatabase();
-        }catch(SQLException e){
-            e.printStackTrace();
-        }
+        updateDatabase();
         responseObject.put("response", "Successfully added Recipe");
         return responseObject;
     }
 
     private void updateDatabase() {
         //TODO Yash store user recipe in database using the given username
-        ArrayList<RecipeItem> recipeItemArrayList  = userRecipe.getIngredients();
-        recipeItemArrayList.get(0).getFoodItem().getFoodId();
+        Connection con = null;
+        Statement stmt = null;
+        try {
+            System.out.println("Trying to save user recipe");
+            //Registering JDBC driver
+            Class.forName("com.mysql.jdbc.Driver");
+
+            //Open a connection
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
+
+            //executing insert query for userrecipe
+            stmt = con.createStatement();
+            String query = "INSERT INTO userrecipe " +
+                    "VALUES(" + this.userRecipe.getFoodId() + " , '" + username + "' , '" + this.userRecipe.getName() + "' , '" + this.userRecipe.getPrepInstructions() + "', " +
+                    " " + this.userRecipe.getNumPortions() + " , '" + this.userRecipe.getServingUnit() + "' , " + this.userRecipe.getCalPerServing() + " , " +
+                    " " + this.userRecipe.getGramsCarbPerServing() + " , " + this.userRecipe.getGramsProtPerServing() + " , " + this.userRecipe.getGramsFatPerServing() + ");";
+
+
+            stmt.executeUpdate(query);
+            System.out.println("Recipe added successfully");
+
+            ArrayList<RecipeItem> recipeItemArrayList = userRecipe.getIngredients();    //to store ingredients of each recipe based on username
+
+            for(int i = 0; i < recipeItemArrayList.size(); i++){
+                int fid = recipeItemArrayList.get(i).getFoodItem().getFoodId();         //foodId of fooditem
+                String numservs = "" + recipeItemArrayList.get(i).getNumServings();     //num of servings of foodItem in recipe
+                stmt = con.createStatement();
+                query = "INSERT INTO recipeitem " +
+                        "VALUES(" + this.userRecipe.getFoodId() + " , " + fid + " '" + numservs + "');";
+                stmt.executeUpdate(query);
+            }
+            System.out.println("RecipeItems added");
+
+        }catch(SQLException se){
+            //Handle errors for JDBC
+            se.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            e.printStackTrace();
+        }finally {
+            //finally block used to close resources
+            try {
+                if (stmt != null)
+                    con.close();
+            } catch (SQLException se) {
+            }// do nothing
+            try {
+                if (con != null)
+                    con.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        } //end finally
     }
 }
