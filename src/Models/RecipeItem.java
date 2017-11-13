@@ -25,6 +25,7 @@ public class RecipeItem implements Serializable {
     }
 
     //Getters
+
     public FoodItem getFoodItem(){return this.foodItem;}
     public int getNumServings(){return this.numServings;}
     //Setters

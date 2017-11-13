@@ -1,9 +1,11 @@
 package com.company.DatabaseOps;
 
+import Models.RecipeItem;
 import Models.UserRecipe;
 import org.json.JSONObject;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class SaveRecipesOp extends DatabaseOp{
     private String username;
@@ -30,6 +32,7 @@ public class SaveRecipesOp extends DatabaseOp{
 
     private void updateDatabase() {
         //TODO Yash store user recipe in database using the given username
-
+        ArrayList<RecipeItem> recipeItemArrayList  = userRecipe.getIngredients();
+        recipeItemArrayList.get(0).getFoodItem().getFoodId();
     }
 }
