@@ -32,36 +32,27 @@ public class SocketServer extends Thread {
             DatabaseOp databaseOp = parseOperation(JSONRequest);
             response = new JSONObject();
             if(databaseOp != null){
-                System.out.println("performing op");
                 response = databaseOp.performOp();
             }else{
                 response = new JSONObject();
                 response.put("response", "unknown request type.");
                 System.out.println("Unknown request type.");
             }
+            String responseAsString = response.toString();
+            System.out.println("response object sent to "  + socket.getInetAddress().getHostAddress());
+            out.write(responseAsString.getBytes());
+            in.close();
+            out.close();
+            socket.close();
 
         } catch (IOException ex) {
             System.out.println("Unable to get streams from client");
         } catch (JSONException e) {
         	e.printStackTrace();
-        	response = new JSONObject();
         	response.put("response", "failure performing Database Operation");
         } catch (SQLException e) {
 
             e.printStackTrace();
-        } finally {
-            try {
-                String responseAsString = response.toString();
-                System.out.println("response object sent to "  + socket.getInetAddress().getHostAddress());
-                out.write(responseAsString.getBytes());
-                in.close();
-                out.close();
-                socket.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch(Exception e){
-                e.printStackTrace();
-            }
         }
     }
 
