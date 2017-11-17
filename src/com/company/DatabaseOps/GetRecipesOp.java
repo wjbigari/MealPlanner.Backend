@@ -24,6 +24,7 @@ public class GetRecipesOp extends DatabaseOp {
     }
     @Override
     public JSONObject performOp() throws SQLException {
+        responseObject =new JSONObject();
         grabFromDatabase();
 
         return responseObject;

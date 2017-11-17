@@ -87,7 +87,9 @@ public class UserRecipe implements Serializable, MealItemContent {
 
     public double getCalPerServing() {
         double cals = 0.0;
+
         for(RecipeItem item : ingredients){
+
             cals += (item.getNumServings() * item.getFoodItem().getCalPerServing());
         }
         return cals / this.numPortions;

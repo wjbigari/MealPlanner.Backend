@@ -21,7 +21,7 @@ public class SaveRecipesOp extends DatabaseOp{
     public SaveRecipesOp(JSONObject jObject){
         super(jObject);
         this.username = jObject.getString("username");
-        this.userRecipe = new UserRecipe(jobject.getString("userRecipe"));
+        this.userRecipe = new UserRecipe(new JSONObject(jobject.getString("recipe")));
     }
     @Override
     public JSONObject performOp() throws SQLException {
