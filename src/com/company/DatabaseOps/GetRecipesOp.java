@@ -34,7 +34,7 @@ public class GetRecipesOp extends DatabaseOp {
     public void grabFromDatabase() {
         JSONArray arrayList = new JSONArray();
         //TODO Yash, use username to grab all UserRecipes and store them a JSONArray list
-
+        responseObject = new JSONObject();
         //members from userRecipe
         int recipeId, numPortions;
         String foodName, servingUnit, instructions;

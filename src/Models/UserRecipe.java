@@ -53,14 +53,15 @@ public class UserRecipe implements Serializable, MealItemContent {
     }
 
     public UserRecipe(JSONObject in) throws JSONException {
-        this.name = in.optString("name");
+        System.out.println(in.toString());
+        this.name = in.optString("uname");
         this.foodId = in.optInt("foodId");
-        JSONArray ingIn = new JSONArray(in.optString("ingredients"));
+        this.ingredients = new ArrayList<RecipeItem>();
+        JSONArray ingIn = new JSONArray(in.getString("ingredients"));
         for(int i = 0; i < ingIn.length(); i++){
-            if(ingIn.get(i) instanceof String){
-                String ing = (String)ingIn.get(i);
-                this.ingredients.add(new RecipeItem(new JSONObject(ing)));
-            }
+            String ing = ingIn.getString(i);
+            System.out.println(ing);
+            this.ingredients.add(new RecipeItem(new JSONObject(ing)));
         }
         this.numPortions = in.optInt("numPortions");
         this.portionName = in.optString("portionName");
@@ -190,7 +191,7 @@ public class UserRecipe implements Serializable, MealItemContent {
 
     public JSONObject toJson() throws JSONException{
         JSONObject out = new JSONObject();
-        out.put("name", this.name);
+        out.put("uname", this.name);
         out.put("foodId", this.foodId);
         JSONArray ing = new JSONArray();
         for(RecipeItem item : this.ingredients){
@@ -202,7 +203,6 @@ public class UserRecipe implements Serializable, MealItemContent {
         out.put("prepInstructions", this.prepInstructions);
         return out;
     }
-
     //Equals override checks whether all relevant fields of this FoodItem object are the same as the FoodItem object passed in
     @Override
     public boolean equals(Object o){

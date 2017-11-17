@@ -1,8 +1,6 @@
 package com.company.DatabaseOps;
 
 import Models.RecipeItem;
-import Models.FoodItem;
-import Models.RecipeItem;
 import Models.UserRecipe;
 import org.json.JSONObject;
 
@@ -10,7 +8,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.*;
 import java.util.ArrayList;
 
 public class SaveRecipesOp extends DatabaseOp{
@@ -25,7 +22,7 @@ public class SaveRecipesOp extends DatabaseOp{
     }
     @Override
     public JSONObject performOp() throws SQLException {
-
+        responseObject = new JSONObject();
         updateDatabase();
         responseObject.put("response", "Successfully added Recipe");
         return responseObject;
@@ -45,12 +42,13 @@ public class SaveRecipesOp extends DatabaseOp{
 
             //executing insert query for userrecipe
             stmt = con.createStatement();
-            String query = "INSERT INTO userrecipe " +
-                    "VALUES(" + this.userRecipe.getFoodId() + " , '" + username + "' , '" + this.userRecipe.getName() + "' , '" + this.userRecipe.getPrepInstructions() + "', " +
-                    " " + this.userRecipe.getNumPortions() + " , '" + this.userRecipe.getServingUnit() + "' , " + this.userRecipe.getCalPerServing() + " , " +
-                    " " + this.userRecipe.getGramsCarbPerServing() + " , " + this.userRecipe.getGramsProtPerServing() + " , " + this.userRecipe.getGramsFatPerServing() + ");";
+            String query = "INSERT INTO userrecipe ( username, recipename, instructions, numPortions, servingUnit, cals, carbs, prots, fats) " +
+                    "VALUES('" + username + "' , '" + this.userRecipe.getName() + "' , '" + this.userRecipe.getPrepInstructions() + "', " +
+                    " '" + this.userRecipe.getNumPortions() + "' , '" + this.userRecipe.getServingUnit() + "' , '" + this.userRecipe.getCalPerServing() + "' , " +
+                    " '" + this.userRecipe.getGramsCarbPerServing() + "' , '" + this.userRecipe.getGramsProtPerServing() + "' , '" + this.userRecipe.getGramsFatPerServing() + "');";
 
-
+            System.out.println(userRecipe.getName());
+            System.out.println(query);
             stmt.executeUpdate(query);
             System.out.println("Recipe added successfully");
 
