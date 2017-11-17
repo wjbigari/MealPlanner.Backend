@@ -7,12 +7,12 @@ public class Constraints {
 	//Fields for constraints set by the user; all nutrient fields are to be stored as Calories, not as Grams
 	private int minCals;
 	private int maxCals;
-	private int minCarbs;
-	private int maxCarbs;
-	private int minProt;
-	private int maxProt;
-	private int minFat;
-	private int maxFat;
+	private double minCarbs;
+	private double maxCarbs;
+	private double minProt;
+	private double maxProt;
+	private double minFat;
+	private double maxFat;
 	
 	//This constructor sets all fields of the constraints according to the values passed in
 	public Constraints(int calMin, int calMax, int carbMin, int carbMax, int protMin, int protMax, int fatMin, int fatMax){
@@ -44,27 +44,27 @@ public class Constraints {
 		return maxCals;
 	}
 
-	public int getMinCarbs() {
+	public double getMinCarbs() {
 		return minCarbs;
 	}
 
-	public int getMaxCarbs() {
+	public double getMaxCarbs() {
 		return maxCarbs;
 	}
 
-	public int getMinProt() {
+	public double getMinProt() {
 		return minProt;
 	}
 
-	public int getMaxProt() {
+	public double getMaxProt() {
 		return maxProt;
 	}
 
-	public int getMinFat() {
+	public double getMinFat() {
 		return minFat;
 	}
 
-	public int getMaxFat() {
+	public double getMaxFat() {
 		return maxFat;
 	}
 
@@ -77,27 +77,27 @@ public class Constraints {
 		this.maxCals = maxCals;
 	}
 
-	public void setMinCarbs(int minCarbs) {
+	public void setMinCarbs(double minCarbs) {
 		this.minCarbs = minCarbs;
 	}
 
-	public void setMaxCarbs(int maxCarbs) {
+	public void setMaxCarbs(double maxCarbs) {
 		this.maxCarbs = maxCarbs;
 	}
 
-	public void setMinProt(int minProt) {
+	public void setMinProt(double minProt) {
 		this.minProt = minProt;
 	}
 
-	public void setMaxProt(int maxProt) {
+	public void setMaxProt(double maxProt) {
 		this.maxProt = maxProt;
 	}
 
-	public void setMinFat(int minFat) {
+	public void setMinFat(double minFat) {
 		this.minFat = minFat;
 	}
 
-	public void setMaxFat(int maxFat) {
+	public void setMaxFat(double maxFat) {
 		this.maxFat = maxFat;
 	}
 	
