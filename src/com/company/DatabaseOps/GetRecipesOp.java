@@ -91,6 +91,7 @@ public class GetRecipesOp extends DatabaseOp {
                             String query3 = "SELECT contents, cals, carbs, prots, fats, minservamt, servingname FROM ingredients WHERE foodid = " + fid + ";";
                             ResultSet rs3 = fooditem.executeQuery(query3);
                            // while(rs3.next()){
+                                rs3.next();
                                 contents = rs3.getString("contents");
                                 cals = rs3.getDouble("cals");
                                 carbs = rs3.getDouble("carbs");
