@@ -5,10 +5,10 @@ import org.json.JSONObject;
 import java.sql.SQLException;
 import java.sql.*;
 
-public class DeleteRecipeItemOp extends DatabaseOp{
+public class DeleteRecipeOp extends DatabaseOp{
     private int recipeId;
 
-    public DeleteRecipeItemOp(JSONObject jObject){
+    public DeleteRecipeOp(JSONObject jObject){
         super(jObject);
         this.recipeId = jObject.getInt("recipeId");
     }
@@ -16,7 +16,9 @@ public class DeleteRecipeItemOp extends DatabaseOp{
     @Override
     public JSONObject performOp() throws SQLException {
         performDatabaseOp();
-        return null;
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("response", "Recipe Item Deleted Successfully");
+        return responseObject;
     }
     private void performDatabaseOp(){
         Connection con = null;

@@ -80,9 +80,9 @@ public class SocketServer extends Thread {
                 consoleString = "getting recipes for ";
                 databaseOp = new GetRecipesOp(jrequest);
                 break;
-            case "deleteRecipeItem":
+            case "deleteRecipe":
                 consoleString = "deleting recipe item for ";
-                databaseOp = new DeleteRecipeItemOp(jrequest);
+                databaseOp = new DeleteRecipeOp(jrequest);
                 break;
             case "modifyRecipe":
                 consoleString = "altering recipe for ";
@@ -91,6 +91,10 @@ public class SocketServer extends Thread {
             case "updateGoals":
                 consoleString = "updating goals for ";
                 databaseOp = new UpdateGoalsOp(jrequest);
+                break;
+            case "login":
+                consoleString = "logging in for ";
+                databaseOp = new LoginOp(jrequest);
                 break;
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
