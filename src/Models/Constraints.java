@@ -5,8 +5,8 @@ import org.json.JSONObject;
 
 public class Constraints {
 	//Fields for constraints set by the user; all nutrient fields are to be stored as Calories, not as Grams
-	private int minCals;
-	private int maxCals;
+	private double minCals;
+	private double maxCals;
 	private double minCarbs;
 	private double maxCarbs;
 	private double minProt;
@@ -27,8 +27,9 @@ public class Constraints {
 	}
 	//No-arg constructor sets all fields to 0; when using this constructor any fields used must be set via Setter methods
 	public Constraints(){
-		this(0, 0, 0, 0, 0, 0, 0, 0);
+		this(2000, 2100, 150, 170, 150, 170, 80, 85);
 	}
+
 	//Constructor for creating a new constraints list out of a JSON Object
 	public Constraints(JSONObject constraintsJson){
 		this();
@@ -36,11 +37,11 @@ public class Constraints {
 	}
 
 	//Getters
-	public int getMinCals() {
+	public double getMinCals() {
 		return minCals;
 	}
 
-	public int getMaxCals() {
+	public double getMaxCals() {
 		return maxCals;
 	}
 
@@ -69,11 +70,11 @@ public class Constraints {
 	}
 
 	//Setters
-	public void setMinCals(int minCals) {
+	public void setMinCals(double minCals) {
 		this.minCals = minCals;
 	}
 
-	public void setMaxCals(int maxCals) {
+	public void setMaxCals(double maxCals) {
 		this.maxCals = maxCals;
 	}
 

@@ -24,6 +24,7 @@ public class RecipeItem implements Serializable {
         this.numServings = in.optInt("numServings");
     }
 
+
     //Getters
 
     public FoodItem getFoodItem(){return this.foodItem;}

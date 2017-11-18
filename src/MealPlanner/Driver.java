@@ -9,6 +9,7 @@ import Models.FoodItem;
 import Models.MealItem;
 import Models.MealPlannerRequest;
 import Models.MealPlannerRec;
+import Models.UserRecipe;
 
 public class Driver {
 	
@@ -36,10 +37,21 @@ public class Driver {
 		FoodItem bacon = new FoodItem("Bacon", 19, 2, "strip(s)", 431, 25, 15, 16);
 		FoodItem gatorade = new FoodItem("Gatorade", 20, 1, "cup(s)", 57, 14, 0, 0);
 		
+		UserRecipe baconEggs = new UserRecipe("Bacon and Eggs", 1001);
+		baconEggs.setNumPortions(2);
+		baconEggs.addRecipeItem(bacon, 2);
+		baconEggs.addRecipeItem(egg, 4);
+		
+		UserRecipe energyShake = new UserRecipe("Energy Shake", 1002);
+		energyShake.setNumPortions(1);
+		energyShake.addRecipeItem(milk, 2);
+		energyShake.addRecipeItem(proteinPowder, 1);
+		energyShake.addRecipeItem(banana, 1);
+		
 
 		//MealItem m_pizza = new MealItem(pizza, MealItem.Meal.LUNCH);
 		MealItem m_pineapple = new MealItem(pineapple, MealItem.Meal.LUNCH);
-		MealItem m_bread = new MealItem(bread, true, 2, MealItem.Meal.LUNCH);	//Locked with 2 servings
+		MealItem m_bread = new MealItem(bread, true, 0, MealItem.Meal.LUNCH);	//Locked with 2 servings
 		MealItem m_milk = new MealItem(milk, MealItem.Meal.BREAKFAST);
 		MealItem m_cheese = new MealItem(cheese, MealItem.Meal.DINNER);
 		MealItem m_broccoli = new MealItem(broccoli, MealItem.Meal.DINNER);
@@ -49,7 +61,7 @@ public class Driver {
 		MealItem m_egg = new MealItem(egg, MealItem.Meal.BREAKFAST);
 		MealItem m_yogurt = new MealItem(yogurt, MealItem.Meal.LUNCH);
 		MealItem m_proteinPowder = new MealItem(proteinPowder, MealItem.Meal.BREAKFAST);
-		MealItem m_chicken = new MealItem(chicken, true, 1, MealItem.Meal.DINNER); //Locked with 1 serving
+		MealItem m_chicken = new MealItem(chicken, true, 0, MealItem.Meal.DINNER); //Locked with 1 serving
 		MealItem m_beef = new MealItem(beef, MealItem.Meal.DINNER);
 		MealItem m_almonds = new MealItem(almonds, MealItem.Meal.LUNCH);
 		MealItem m_salmon = new MealItem(salmon, MealItem.Meal.DINNER);
@@ -59,6 +71,9 @@ public class Driver {
 		MealItem m_bacon = new MealItem(bacon, MealItem.Meal.BREAKFAST);
 		MealItem m_gatorade = new MealItem(gatorade, MealItem.Meal.LUNCH);
 		
+		MealItem m_baconEggs = new MealItem(baconEggs, true, 0, MealItem.Meal.BREAKFAST);
+		MealItem m_energyShake = new MealItem(energyShake, true, 0, MealItem.Meal.LUNCH);
+		
 
 		//Food[] foods = {pizza, pineapple, bread, milk};
 		ArrayList<MealItem> meal = new ArrayList<>();
@@ -67,6 +82,7 @@ public class Driver {
 		meal.add(m_banana); meal.add(m_egg); meal.add(m_yogurt); meal.add(m_proteinPowder);
 		meal.add(m_chicken); meal.add(m_beef); meal.add(m_almonds); meal.add(m_salmon);
 		meal.add(m_pbj); meal.add(m_cheesecake); meal.add(m_whiskey); meal.add(m_bacon); meal.add(m_gatorade);
+		meal.add(m_baconEggs); meal.add(m_energyShake);
 
 
 		Constraints c = new Constraints(

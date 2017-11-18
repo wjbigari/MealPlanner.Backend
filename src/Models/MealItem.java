@@ -12,29 +12,33 @@ public class MealItem {
 	//Enumerable type to easily identify the meal this FoodItem is a part of
 	public enum Meal{BREAKFAST, LUNCH, DINNER}
 	//Fields for qualifying the FoodItem in context of the meal it's in
-	private FoodItem foodItem;
+	private MealItemContent content;
 	private boolean isLocked;
 	private int numServings;
 	private Meal meal;
 
 	//Three available constructors - with the FoodItem and Meal specified; with both plus the Locked state; and with all fields specified
-	public MealItem(FoodItem food, MealItem.Meal meal){
-		this.foodItem = food;
+	public MealItem(MealItemContent contents, MealItem.Meal meal){
+		this.content = contents;
 		this.isLocked = false;
 		this.numServings = 0;
 		this.meal = meal;
 	}
-	public MealItem(FoodItem food, boolean locked, MealItem.Meal meal){
-		this(food, meal);
+	public MealItem(MealItemContent contents, boolean locked, MealItem.Meal meal){
+		this(contents, meal);
 		this.isLocked = locked;
 	}
-	public MealItem(FoodItem food, boolean locked, int servings, MealItem.Meal meal){
-		this(food, locked, meal);
+	public MealItem(MealItemContent contents, boolean locked, int servings, MealItem.Meal meal){
+		this(contents, locked, meal);
 		this.numServings = servings;
 	}
     public MealItem(JSONObject fromObject) throws JSONException {
-	    String foodItemString = fromObject.optString("content");
-	    this.foodItem = new FoodItem(new JSONObject(foodItemString));
+	    JSONObject contentObject = new JSONObject(fromObject.getString("content"));
+	    if(contentObject.optInt("numPortions") < 1){
+	    	this.content = new FoodItem(contentObject);
+	    }else{
+	    	this.content = new UserRecipe(contentObject);
+	    }
 	    this.isLocked = fromObject.optBoolean("isLocked");
 	    this.numServings = fromObject.optInt("numServings");
 	    String mealString = fromObject.optString("meal");
@@ -50,12 +54,10 @@ public class MealItem {
                 break;
         }
     }
-	public MealItem() {
-		// TODO Auto-generated constructor stub
-	}
+
 	//Getters
-	public FoodItem getFoodItem() {
-		return foodItem;
+	public MealItemContent getFoodItem() {
+		return content;
 	}
 	public boolean isLocked() {
 		return isLocked;
@@ -81,7 +83,7 @@ public class MealItem {
 	//JSON serialization function
     public JSONObject toJson() throws JSONException{
 	    JSONObject returnObject = new JSONObject();
-	    returnObject.put("content", this.foodItem.toJson().toString());
+	    returnObject.put("content", this.content.toJson().toString());
 	    returnObject.put("meal", this.meal.name());
 	    returnObject.put("isLocked", this.isLocked);
 	    returnObject.put("numServings", this.numServings);

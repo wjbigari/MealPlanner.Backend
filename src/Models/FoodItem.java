@@ -4,15 +4,15 @@ package Models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class FoodItem {
+public class FoodItem implements MealItemContent {
 	//Values used for identifying the food item
 	private String name;
 	private int foodId;
 	//Values used for representing serving size
-	private int servingValue;
+	private double servingValue;
 	private String servingUnit;
 	//Main values used by the meal planner for balancing
-	private int calPerServing;
+	private double calPerServing;
 	private double gramsCarbPerServing;
 	private double gramsProtPerServing;
 	private double gramsFatPerServing;
@@ -83,7 +83,7 @@ public class FoodItem {
 		return foodId;
 	}
 
-	public int getServingValue() {
+	public double getServingValue() {
 		return servingValue;
 	}
 
@@ -91,7 +91,7 @@ public class FoodItem {
 		return servingUnit;
 	}
 
-	public int getCalPerServing() {
+	public double getCalPerServing() {
 		return calPerServing;
 	}
 
@@ -124,15 +124,11 @@ public class FoodItem {
 		this.foodId = foodId;
 	}
 
-	public void setServingValue(int servingValue) {
-		this.servingValue = servingValue;
-	}
-
 	public void setServingUnit(String servingUnit) {
 		this.servingUnit = servingUnit;
 	}
 
-	public void setCalPerServing(int calPerServing) {
+	public void setCalPerServing(double calPerServing) {
 		this.calPerServing = calPerServing;
 	}
 
@@ -147,11 +143,19 @@ public class FoodItem {
 	public void setGramsFatPerServing(double gramsFatPerServing) {
 		this.gramsFatPerServing = gramsFatPerServing;
 	}
+	
+	public void setServingValue(double val) {
+		this.servingValue = val;
+	}
+	
+	public void setInternalCoefficient(double coefficient) {
+		this.internalCoefficient = coefficient;
+	}
 
 	//Derived Getters - returns a useful modifier over or combination of fields
-	public double getCalsCarbPerServing(){return this.getGramsCarbPerServing() * 4;}
-	public double getCalsProtPerServing(){return this.getGramsProtPerServing() * 4;}
-	public double getCalsFatPerServing(){return this.getGramsFatPerServing() * 9;}
+	public long getCalsCarbPerServing(){return (long)(this.getGramsCarbPerServing() * 4);}
+	public long getCalsProtPerServing(){return (long)(this.getGramsProtPerServing() * 4);}
+	public long getCalsFatPerServing(){return (long)(this.getGramsFatPerServing() * 9);}
 	public String getServingSize(){return this.getServingValue() + " " + this.getServingUnit();}
 
 

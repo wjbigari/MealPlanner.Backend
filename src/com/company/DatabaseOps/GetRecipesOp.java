@@ -24,6 +24,7 @@ public class GetRecipesOp extends DatabaseOp {
     }
     @Override
     public JSONObject performOp() throws SQLException {
+        responseObject =new JSONObject();
         grabFromDatabase();
 
         return responseObject;
@@ -150,10 +151,6 @@ public class GetRecipesOp extends DatabaseOp {
                 arrayList.put(trecipe.toJson().toString());
 
             }
-
-
-
-
             responseObject.put("recipeList", arrayList.toString());
         }catch(SQLException se){
             //Handle errors for JDBC
