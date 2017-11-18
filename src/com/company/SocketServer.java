@@ -80,6 +80,13 @@ public class SocketServer extends Thread {
                 consoleString = "getting recipes for ";
                 databaseOp = new GetRecipesOp(jrequest);
                 break;
+            case "deleteRecipeItem":
+                consoleString = "deleting recipe item for ";
+                databaseOp = new DeleteRecipeItemOp(jrequest);
+                break;
+            case "modifyRecipe":
+                consoleString = "altering recipe for ";
+                databaseOp = new ModifyRecipesOp(jrequest);
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;
