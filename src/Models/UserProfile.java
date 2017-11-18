@@ -52,6 +52,7 @@ public class UserProfile implements Serializable {
                 this.gen = FEMALE;
                 break;
         }
+        this.constraints = new Constraints(new JSONObject(jobject.getString("constraints")));
 
     }
 
@@ -121,6 +122,7 @@ public class UserProfile implements Serializable {
         jobject.put("height", this.height);
         jobject.put("weight", this.weight);
         jobject.put("gender", this.gen.name());
+        jobject.put("constraints", this.constraints.toJson().toString());
         return jobject;
     }
 }
