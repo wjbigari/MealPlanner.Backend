@@ -4,10 +4,10 @@ import org.json.JSONObject;
 
 import java.sql.SQLException;
 
-public class DeleteRecipeOp extends DatabaseOp{
+public class DeleteRecipeItemOp extends DatabaseOp{
     private int recipeId;
 
-    public DeleteRecipeOp(JSONObject jObject){
+    public DeleteRecipeItemOp(JSONObject jObject){
         super(jObject);
         this.recipeId = jObject.getInt("recipeId");
     }

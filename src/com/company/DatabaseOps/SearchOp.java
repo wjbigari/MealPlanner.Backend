@@ -40,7 +40,7 @@ public class SearchOp extends DatabaseOp{
                 sname = rs.getString("servingname");
 
 
-                FoodItem i1 = new FoodItem(content, id, samount, sname, cals,carbs,prots, fats);
+                FoodItem i1 = new FoodItem(content, id, (int)samount, sname, (int)cals,carbs,prots, fats);
                 System.out.println("adding food item " + content + "to list.");
                 JSONObject obj1 = i1.toJson();
                 System.out.println(i1.toString());

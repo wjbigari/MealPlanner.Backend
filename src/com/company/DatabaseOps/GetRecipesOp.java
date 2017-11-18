@@ -99,7 +99,7 @@ public class GetRecipesOp extends DatabaseOp {
                                 unit = rs.getString("servingname");
 
                                 //adding fooditems and numServings into ingredients (arraylist)
-                                ingredients.add(new RecipeItem(new FoodItem(contents, fid, value, unit, cals, carbs, prots, fats), numServings));
+                                ingredients.add(new RecipeItem(new FoodItem(contents, fid, (int)value, unit, (int)cals, carbs, prots, fats), numServings));
                            //}
                         }catch(SQLException se){
                             //Handle errors for JDBC
