@@ -27,8 +27,9 @@ public class Constraints {
 	}
 	//No-arg constructor sets all fields to 0; when using this constructor any fields used must be set via Setter methods
 	public Constraints(){
-		this(0, 0, 0, 0, 0, 0, 0, 0);
+		this(2000, 2100, 150, 170, 150, 170, 80, 85);
 	}
+
 	//Constructor for creating a new constraints list out of a JSON Object
 	public Constraints(JSONObject constraintsJson){
 		this();
