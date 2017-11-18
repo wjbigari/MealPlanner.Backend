@@ -4,10 +4,7 @@ import Models.RecipeItem;
 import Models.UserRecipe;
 import org.json.JSONObject;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SaveRecipesOp extends DatabaseOp{
@@ -52,6 +49,10 @@ public class SaveRecipesOp extends DatabaseOp{
             stmt.executeUpdate(query);
             System.out.println("Recipe added successfully");
 
+            //fetching the latest added userrecipe
+            String latestRecipeId = "SELECT recipeid from userrecipe ORDER BY recipeid DESC LIMIT 1 ;";
+            ResultSet rs = stmt.executeQuery(latestRecipeId);
+
             ArrayList<RecipeItem> recipeItemArrayList = userRecipe.getIngredients();    //to store ingredients of each recipe based on username
 
             for(int i = 0; i < recipeItemArrayList.size(); i++){
@@ -59,7 +60,7 @@ public class SaveRecipesOp extends DatabaseOp{
                 String numservs = "" + recipeItemArrayList.get(i).getNumServings();     //num of servings of foodItem in recipe
                 stmt = con.createStatement();
                 query = "INSERT INTO recipeitem " +
-                        "VALUES(" + this.userRecipe.getFoodId() + " , " + fid + " '" + numservs + "');";
+                        "VALUES(" + rs.getInt("recipeid") + " , " + fid + " , '" + numservs + "');";
                 stmt.executeUpdate(query);
             }
             System.out.println("RecipeItems added");
