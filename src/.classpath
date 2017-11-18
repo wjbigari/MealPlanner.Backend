@@ -2,7 +2,8 @@
 <classpath>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Nick/git/MealPlanner.Backend/lib/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Nick/git/MealPlanner.Backend/lib/mysql-connector-java-5.1.44-bin.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/git/MealPlanner.Backend/lib/json-20170516.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/git/MealPlanner.Backend/lib/junit-4.12.jar"/>
+	<classpathentry kind="lib" path="C:/Users/user/git/MealPlanner.Backend/lib/mysql-connector-java-5.1.44-bin.jar"/>
 	<classpathentry kind="output" path=""/>
 </classpath>

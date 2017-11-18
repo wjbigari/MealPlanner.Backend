@@ -19,7 +19,7 @@ public class MealPlanner {
 	private static int lockedItemCount = 0;
 
 	private static void setGlobalVariables(int foodCount, Constraints c) {
-		totalRuns = 100 - foodCount - (c.getMaxCals()/100);
+		totalRuns = (int)(100 - foodCount - (c.getMaxCals()/100));
 		if (totalRuns < 30)
 			totalRuns = 30;
 		System.out.println("Total Runs set to: " + totalRuns);
@@ -32,6 +32,8 @@ public class MealPlanner {
 	//MAIN HANDLER -- All MealPlannerRequest processing should be run through this function
 	public static MealPlannerRec createMealPlan(MealPlannerRequest request) throws InterruptedException{
 		int count = request.getMealItems().size();
+		
+		//1. Set up a count of locked MealItems with no specified number of servings
 		ArrayList<MealItem> list = request.getMealItems();
 		for (int i = 0 ; i < count; i++) {
 			if (list.get(i).isLocked())
@@ -42,7 +44,7 @@ public class MealPlanner {
 		MealPlannerRec result = new MealPlannerRec();
 		ArrayList<MealItem> adjustedItems = new ArrayList<>();
 
-		//1. Iterate over the MealItems, identify Locked items with a set quantity, move them to the final list and adjust the Constraints
+		//2. Iterate over the MealItems, identify Locked items with a set quantity, move them to the final list and adjust the Constraints
 		for(MealItem item : request.getMealItems()){
 			if(item.isLocked() && item.getNumServings() > 0){
 				adjustConstraints(item, request.getConstraints());
@@ -52,9 +54,6 @@ public class MealPlanner {
 			}
 		}
 		request.setMealItems(adjustedItems);
-		
-		//2. TODO: Adjust the fitness function using the values of the Constraints
-
 
 		//3. Send the Request's adjusted Constraints and list of MealItems to the main algorithm, get back the adjusted counts
 		ArrayList<MealItem> output = selectMeals(request.getConstraints(), request.getMealItems());
