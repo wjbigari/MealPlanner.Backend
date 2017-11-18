@@ -7,9 +7,10 @@ import org.json.JSONObject;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+@SuppressWarnings("serial")
 public class UserRecipe implements Serializable, MealItemContent {
 
-    //Values used for identifying the food item
+	//Values used for identifying the food item
     private String name;
     private int foodId;
     //Values used for storing recipe information

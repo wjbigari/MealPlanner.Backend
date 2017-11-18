@@ -5,3 +5,8 @@
 /FoodItem.class
 /MealItem.class
 /MealItem$Meal.class
+/MealItemContent.class
+/RecipeItem.class
+/UserProfile$gender.class
+/UserProfile.class
+/UserRecipe.class
