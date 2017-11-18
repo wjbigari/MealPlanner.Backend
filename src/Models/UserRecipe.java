@@ -62,7 +62,8 @@ public class UserRecipe implements Serializable, MealItemContent {
         for(int i = 0; i < ingIn.length(); i++){
             String ing = ingIn.getString(i);
             System.out.println(ing);
-            this.ingredients.add(new RecipeItem(new JSONObject(ing)));
+            RecipeItem titem = new RecipeItem(new JSONObject(ing));
+            this.ingredients.add(titem);
         }
         this.numPortions = in.optInt("numPortions");
         this.portionName = in.optString("portionName");

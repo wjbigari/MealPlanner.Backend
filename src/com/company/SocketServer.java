@@ -87,6 +87,11 @@ public class SocketServer extends Thread {
             case "modifyRecipe":
                 consoleString = "altering recipe for ";
                 databaseOp = new ModifyRecipesOp(jrequest);
+                break;
+            case "updateGoals":
+                consoleString = "updating goals for ";
+                databaseOp = new UpdateGoalsOp(jrequest);
+                break;
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;
