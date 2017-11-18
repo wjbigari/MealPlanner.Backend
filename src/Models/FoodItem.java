@@ -68,9 +68,9 @@ public class FoodItem {
         this.servingValue = fromObject.optInt("servingValue");
         this.servingUnit = fromObject.optString("servingUnit");
         this.calPerServing = fromObject.optInt("calPerServing");
-        this.gramsCarbPerServing = fromObject.optInt("gramsCarbPerServing");
-        this.gramsProtPerServing = fromObject.optInt("gramsProtPerServing");
-        this.gramsFatPerServing = fromObject.optInt("gramsFatPerServing");
+        this.gramsCarbPerServing = fromObject.optDouble("gramsCarbPerServing");
+        this.gramsProtPerServing = fromObject.optDouble("gramsProtPerServing");
+        this.gramsFatPerServing = fromObject.optDouble("gramsFatPerServing");
         this.internalCoefficient = fromObject.optDouble("internalCoefficient");
     }
 

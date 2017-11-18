@@ -58,8 +58,10 @@ public class SaveRecipesOp extends DatabaseOp{
                 int fid = recipeItemArrayList.get(i).getFoodItem().getFoodId();         //foodId of fooditem
                 String numservs = "" + recipeItemArrayList.get(i).getNumServings();     //num of servings of foodItem in recipe
                 stmt = con.createStatement();
+
                 query = "INSERT INTO recipeitem " +
                         "VALUES(" + this.userRecipe.getFoodId() + " , " + fid + " '" + numservs + "');";
+                System.out.println(query);
                 stmt.executeUpdate(query);
             }
             System.out.println("RecipeItems added");
