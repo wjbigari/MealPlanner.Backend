@@ -43,24 +43,28 @@ public class SaveRecipesOp extends DatabaseOp{
                     "VALUES('" + username + "' , '" + this.userRecipe.getName() + "' , '" + this.userRecipe.getPrepInstructions() + "', " +
                     " '" + this.userRecipe.getNumPortions() + "' , '" + this.userRecipe.getServingUnit() + "' , '" + this.userRecipe.getCalPerServing() + "' , " +
                     " '" + this.userRecipe.getGramsCarbPerServing() + "' , '" + this.userRecipe.getGramsProtPerServing() + "' , '" + this.userRecipe.getGramsFatPerServing() + "');";
-
-            System.out.println(userRecipe.getName());
             System.out.println(query);
             stmt.executeUpdate(query);
-            System.out.println("Recipe added successfully");
+            System.out.println("User Recipe added successfully");
 
             //fetching the latest added userrecipe
             String latestRecipeId = "SELECT recipeid from userrecipe ORDER BY recipeid DESC LIMIT 1 ;";
+            System.out.println(latestRecipeId);
+            stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(latestRecipeId);
-
+            rs.next();
+            int recipeidint = rs.getInt("recipeid");
+            System.out.println(recipeidint);
             ArrayList<RecipeItem> recipeItemArrayList = userRecipe.getIngredients();    //to store ingredients of each recipe based on username
 
             for(int i = 0; i < recipeItemArrayList.size(); i++){
                 int fid = recipeItemArrayList.get(i).getFoodItem().getFoodId();         //foodId of fooditem
                 String numservs = "" + recipeItemArrayList.get(i).getNumServings();     //num of servings of foodItem in recipe
                 stmt = con.createStatement();
+
                 query = "INSERT INTO recipeitem " +
                         "VALUES(" + rs.getInt("recipeid") + " , " + fid + " , '" + numservs + "');";
+                System.out.println(query);
                 stmt.executeUpdate(query);
             }
             System.out.println("RecipeItems added");

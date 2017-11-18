@@ -20,7 +20,7 @@ public class RecipeItem implements Serializable {
         this.numServings = servings;
     }
     public RecipeItem(JSONObject in){
-        this.foodItem = new FoodItem(in.optString("foodItem"));
+        this.foodItem = new FoodItem(new JSONObject(in.optString("foodItem")));
         this.numServings = in.optInt("numServings");
     }
 
