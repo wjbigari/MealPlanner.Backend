@@ -49,6 +49,7 @@ public class ModifyRecipesOp extends DatabaseOp {
                     String updatePortions = "UPDATE userrecipe " +
                                             "SET numPortions = " + this.userRecipe.getNumPortions() + ";";
                     stmt.executeUpdate(updatePortions);
+                    System.out.println("numPortions updated");
                 }
 
                 //updating instructions
@@ -56,6 +57,7 @@ public class ModifyRecipesOp extends DatabaseOp {
                     String updateInstructions = "UPDATE userrecipe " +
                                                 "SET instructions = '" + this.userRecipe.getPrepInstructions() + "' ;";
                     stmt.executeUpdate(updateInstructions);
+                    System.out.println("instructions updated");
                 }
 
                 //updating recipename
@@ -63,19 +65,36 @@ public class ModifyRecipesOp extends DatabaseOp {
                     String updateName = "UPDATE userrecipe "+
                                         "SET recipename = '" + this.userRecipe.getName() + "' ;";
                     stmt.executeUpdate(updateName);
+                    System.out.println("recipe name updated updated");
                 }
 
                 //updating the recipeitem
-                String selectRecipeItem = "SELECT foodid, numServings FROM recipeitem " +
+               /* String selectRecipeItem = "SELECT foodid, numServings FROM recipeitem " +
                                             "WHERE recipeid = '" + this.userRecipe.getFoodId() + "';";
                 ResultSet item = stmt.executeQuery(selectRecipeItem);
 
                 //TODO for each recipeitem update numServings, remove foodid (add new foodid)
-                ArrayList<RecipeItem> recipeItemArrayList = this.userRecipe.getIngredients();
+
 
                 while(item.next()){
 
+                } */
+               //deleting from recipe item table
+               String deleteRecipeItem = "DELETE FROM recipeitem WHERE recipeid = " + this.userRecipe.getFoodId() +";";
+               stmt.executeUpdate(deleteRecipeItem);
+
+                ArrayList<RecipeItem> recipeItemArrayList = this.userRecipe.getIngredients();
+               //inserting updated record into recipeitem table
+                for(int i = 0; i < recipeItemArrayList.size(); i++){
+                    int fid = recipeItemArrayList.get(i).getFoodItem().getFoodId();         //foodId of fooditem
+                    String numservs = "" + recipeItemArrayList.get(i).getNumServings();     //num of servings of foodItem in recipe
+
+                    String updatedRecipeItem = "INSERT INTO recipeitem " +
+                            "VALUES(" + this.userRecipe.getFoodId() + " , " + fid + " , '" + numservs + "');";
+                    stmt.executeUpdate(updatedRecipeItem);
+
                 }
+                System.out.println("Recipe items updated successfully");
 
             }
 
