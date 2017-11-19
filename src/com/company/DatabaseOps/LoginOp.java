@@ -21,11 +21,13 @@ public class LoginOp extends DatabaseOp {
 
     @Override
     public JSONObject performOp() throws SQLException {
+        this.responseObject = new JSONObject();
         try {
             login();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         return this.responseObject;
     }
 
@@ -47,7 +49,7 @@ public class LoginOp extends DatabaseOp {
             }
         }
         if (login){
-            responseObject.put("login", true);
+            System.out.println("logged in Successfully");
             stmt = con.createStatement();
             String userProfile = "SELECT * FROM userprofile WHERE username = '" + this.username + "' ; ";
             ResultSet rs1 = stmt.executeQuery(userProfile);
@@ -60,6 +62,7 @@ public class LoginOp extends DatabaseOp {
 
             String userConstraints = "SELECT * FROM constraints WHERE username = '" + this.username + "';";
             ResultSet rs2 = stmt.executeQuery(userConstraints);
+            rs2.next();
             int mincals = rs2.getInt("mincals");
             int maxcals = rs2.getInt("maxcals");
             int mincarbs = rs2.getInt("mincarbs");
@@ -72,9 +75,7 @@ public class LoginOp extends DatabaseOp {
             Constraints constraints = new Constraints(mincals, maxcals, mincarbs, maxcarbs, minprot, maxprot, minfat, maxfat);
             UserProfile userprofile = new UserProfile(this.username, name, age, height, weight, gender);
             userprofile.setConstraints(constraints);
-
-        }else{
-            responseObject.put("login", false);
+            responseObject.put("userProfile", userprofile.toJSON().toString());
         }
 
     }
