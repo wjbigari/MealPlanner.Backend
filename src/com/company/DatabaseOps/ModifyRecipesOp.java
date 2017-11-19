@@ -13,21 +13,24 @@ import java.util.ArrayList;
 
 public class ModifyRecipesOp extends DatabaseOp {
     private String username;
+    private JSONObject responseObject;
     private UserRecipe userRecipe;
     public ModifyRecipesOp(JSONObject jObject){
         super(jObject);
         this.username = jObject.getString("username");
-        this.userRecipe = new UserRecipe(new JSONObject(jobject.getString("recipe")));
+        this.userRecipe = new UserRecipe(new JSONObject(jobject.getString("userRecipe")));
     }
     @Override
     public JSONObject performOp() throws SQLException {
         performDatabaseOp();
-        return null;
+        responseObject = new JSONObject();
+        responseObject.put("response", "Recipe was modified successfully");
+        return responseObject;
     }
 
     private void performDatabaseOp() {
         Connection con = null;
-        Statement stmt = null;
+        Statement stmt1 = null, stmt = null;
         try {
             //Registering JDBC driver
             Class.forName("com.mysql.jdbc.Driver");
@@ -36,34 +39,34 @@ public class ModifyRecipesOp extends DatabaseOp {
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
 
             //modifying from userrecipe table
-            stmt = con.createStatement();
+            stmt1 = con.createStatement();
             String selectRecipe = "SELECT recipeid, username, recipename, instructions, numPortions FROM userrecipe " +
                                    "WHERE recipeid = " + this.userRecipe.getFoodId() + " AND username = '" + this.username + "' ;";
-            ResultSet recipe = stmt.executeQuery(selectRecipe);
+            ResultSet recipe = stmt1.executeQuery(selectRecipe);
 
+            stmt = con.createStatement();
             //to check if numPortions, instructions and recipename don't match with results from selectRecipe
             while(recipe.next()){
-
                 //updating numPortions
-                if(this.userRecipe.getNumPortions() != recipe.getInt("numPortions")){
+                if(this.userRecipe.getNumPortions() != (recipe.getInt("numPortions"))){
                     String updatePortions = "UPDATE userrecipe " +
-                                            "SET numPortions = " + this.userRecipe.getNumPortions() + ";";
+                                            "SET numPortions = " + this.userRecipe.getNumPortions() + " WHERE username = '" + this.username + "';";
                     stmt.executeUpdate(updatePortions);
                     System.out.println("numPortions updated");
                 }
 
                 //updating instructions
-                if(this.userRecipe.getPrepInstructions() != recipe.getString("instructions")){
+                if(!this.userRecipe.getPrepInstructions().equals(recipe.getString("instructions"))){
                     String updateInstructions = "UPDATE userrecipe " +
-                                                "SET instructions = '" + this.userRecipe.getPrepInstructions() + "' ;";
+                                                "SET instructions = '" + this.userRecipe.getPrepInstructions() + "' WHERE username = '" + this.username + "';";
                     stmt.executeUpdate(updateInstructions);
                     System.out.println("instructions updated");
                 }
 
                 //updating recipename
-                if(this.userRecipe.getName() != recipe.getString("recipename")){
+                if(!this.userRecipe.getName().equals(recipe.getString("recipename"))){
                     String updateName = "UPDATE userrecipe "+
-                                        "SET recipename = '" + this.userRecipe.getName() + "' ;";
+                                        "SET recipename = '" + this.userRecipe.getName() + "' WHERE username = '" + this.username + "';";
                     stmt.executeUpdate(updateName);
                     System.out.println("recipe name updated updated");
                 }

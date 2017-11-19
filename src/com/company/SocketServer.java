@@ -59,6 +59,7 @@ public class SocketServer extends Thread {
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
         String consoleString = "Invalid request from ";
+        System.out.println(jrequest.toString());
         switch(jrequest.getString("option")){
             case "search":{
                 consoleString = "performing food item search for ";
