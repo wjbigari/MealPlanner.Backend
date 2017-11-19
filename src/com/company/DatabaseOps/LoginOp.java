@@ -1,8 +1,11 @@
 package com.company.DatabaseOps;
 
+import Models.Constraints;
+import Models.UserProfile;
 import com.company.DatabaseOps.DatabaseOp;
 import org.json.JSONObject;
-
+import static Models.UserProfile.gender.FEMALE;
+import static Models.UserProfile.gender.MALE;
 import java.sql.*;
 
 public class LoginOp extends DatabaseOp {
@@ -45,6 +48,31 @@ public class LoginOp extends DatabaseOp {
         }
         if (login){
             responseObject.put("login", true);
+            stmt = con.createStatement();
+            String userProfile = "SELECT * FROM userprofile WHERE username = '" + this.username + "' ; ";
+            ResultSet rs1 = stmt.executeQuery(userProfile);
+            rs1.next();
+            String name = rs1.getString("name");
+            int weight = rs1.getInt("weight");
+            int height = rs1.getInt("height");
+            int age = rs1.getInt("age");
+            UserProfile.gender gender = rs1.getString("gender").equals("MALE")? MALE : FEMALE;
+
+            String userConstraints = "SELECT * FROM constraints WHERE username = '" + this.username + "';";
+            ResultSet rs2 = stmt.executeQuery(userConstraints);
+            int mincals = rs2.getInt("mincals");
+            int maxcals = rs2.getInt("maxcals");
+            int mincarbs = rs2.getInt("mincarbs");
+            int maxcarbs = rs2.getInt("maxcarbs");
+            int minprot = rs2.getInt("minprot");
+            int maxprot = rs2.getInt("maxprot");
+            int minfat = rs2.getInt("minfat");
+            int maxfat = rs2.getInt("maxfat");
+
+            Constraints constraints = new Constraints(mincals, maxcals, mincarbs, maxcarbs, minprot, maxprot, minfat, maxfat);
+            UserProfile userprofile = new UserProfile(this.username, name, age, height, weight, gender);
+            userprofile.setConstraints(constraints);
+
         }else{
             responseObject.put("login", false);
         }
