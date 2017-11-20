@@ -89,6 +89,7 @@ public class LoginOp extends DatabaseOp {
             Constraints constraints = new Constraints(mincals, maxcals, mincarbs, maxcarbs, minprot, maxprot, minfat, maxfat);
             UserProfile userprofile = new UserProfile(this.username, name, age, height, weight, gender);
             userprofile.setConstraints(constraints);
+            
             responseObject.put("userProfile", userprofile.toJSON().toString());
         }
 
