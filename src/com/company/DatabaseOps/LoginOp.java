@@ -6,6 +6,9 @@ import com.company.DatabaseOps.DatabaseOp;
 import org.json.JSONObject;
 import static Models.UserProfile.gender.FEMALE;
 import static Models.UserProfile.gender.MALE;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.*;
 
 public class LoginOp extends DatabaseOp {
@@ -38,18 +41,29 @@ public class LoginOp extends DatabaseOp {
         con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner","root","root");
 
         stmt = con.createStatement();
-        String query = "SELECT * FROM userprofile WHERE username = '"+ this.username +
-                "' AND password = '" + this.password + "';";
+        String query = "SELECT * FROM userprofile WHERE username = '"+ this.username + "';";
 
         ResultSet rs = stmt.executeQuery(query);
         boolean login = false;
         if(rs.next()){
-            if(rs.getString("password").equals(this.password) && rs.getString("username").equals(this.username)){
-                login = true;
+            String passwordFromDB = rs.getString("password");
+            try{
+                MessageDigest md = MessageDigest.getInstance("MD5");
+                byte [] hash = md.digest(this.password.getBytes());
+                System.out.println( passwordFromDB + " : " +  byteArrayToString(hash));
+                if(passwordFromDB.equals(byteArrayToString(hash))){
+                    System.out.println(username + "logged in.");
+                    login = true;
+                }else{
+                    System.out.println("failed to log in");
+                }
             }
+            catch (NoSuchAlgorithmException x){
+                System.out.println(x.getStackTrace());
+            }
+
         }
         if (login){
-            System.out.println("logged in Successfully");
             stmt = con.createStatement();
             String userProfile = "SELECT * FROM userprofile WHERE username = '" + this.username + "' ; ";
             ResultSet rs1 = stmt.executeQuery(userProfile);
@@ -78,5 +92,13 @@ public class LoginOp extends DatabaseOp {
             responseObject.put("userProfile", userprofile.toJSON().toString());
         }
 
+    }
+    private String byteArrayToString(byte[] in) {
+        char out[] = new char[in.length * 2];
+        for (int i = 0; i < in.length; i++) {
+            out[i * 2] = "0123456789ABCDEF".charAt((in[i] >> 4) & 15);
+            out[i * 2 + 1] = "0123456789ABCDEF".charAt(in[i] & 15);
+        }
+        return new String(out);
     }
 }
