@@ -55,7 +55,7 @@ public class InsertUserOp extends DatabaseOp {
             try{
                 md = MessageDigest.getInstance("MD5");
             }
-            catch (NoSuchAlgorithmException x){
+            catch (NoSuchAlgorithmException x) {
                 System.out.println(x.getStackTrace());
             }
             //hash the password

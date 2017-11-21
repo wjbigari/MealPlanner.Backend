@@ -39,6 +39,7 @@ public class SocketServer extends Thread {
                 System.out.println("Unknown request type.");
             }
             String responseAsString = response.toString();
+            System.out.println(response.toString(3));
             System.out.println("response object sent to "  + socket.getInetAddress().getHostAddress());
             out.write(responseAsString.getBytes());
             in.close();
@@ -59,7 +60,7 @@ public class SocketServer extends Thread {
     private DatabaseOp parseOperation(JSONObject jrequest){
         DatabaseOp databaseOp = null;
         String consoleString = "Invalid request from ";
-        System.out.println(jrequest.toString());
+        System.out.println(jrequest.toString(2));
         switch(jrequest.getString("option")){
             case "search":{
                 consoleString = "performing food item search for ";

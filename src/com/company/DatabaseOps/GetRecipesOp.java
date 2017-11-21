@@ -148,6 +148,7 @@ public class GetRecipesOp extends DatabaseOp {
                 UserRecipe trecipe = new UserRecipe(foodName, recipeId, ingredients, numPortions, servingUnit, instructions);
                 //make new with constructor
                 arrayList.put(trecipe.toJson().toString());
+                ingredients.clear();
 
             }
             responseObject.put("recipeList", arrayList.toString());

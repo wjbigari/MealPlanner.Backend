@@ -50,7 +50,7 @@ public class ModifyRecipesOp extends DatabaseOp {
                 //updating numPortions
                 if(this.userRecipe.getNumPortions() != (recipe.getInt("numPortions"))){
                     String updatePortions = "UPDATE userrecipe " +
-                                            "SET numPortions = " + this.userRecipe.getNumPortions() + " WHERE username = '" + this.username + "';";
+                                            "SET numPortions = " + this.userRecipe.getNumPortions() + " WHERE username = '" + this.username + "'AND recipeid =  "+this.userRecipe.getFoodId() + ";";
                     stmt.executeUpdate(updatePortions);
                     System.out.println("numPortions updated");
                 }
@@ -58,7 +58,7 @@ public class ModifyRecipesOp extends DatabaseOp {
                 //updating instructions
                 if(!this.userRecipe.getPrepInstructions().equals(recipe.getString("instructions"))){
                     String updateInstructions = "UPDATE userrecipe " +
-                                                "SET instructions = '" + this.userRecipe.getPrepInstructions() + "' WHERE username = '" + this.username + "';";
+                                                "SET instructions = '" + this.userRecipe.getPrepInstructions() + "' WHERE username = '" + this.username + "'AND recipeid =  "+this.userRecipe.getFoodId() + ";";
                     stmt.executeUpdate(updateInstructions);
                     System.out.println("instructions updated");
                 }
@@ -66,7 +66,7 @@ public class ModifyRecipesOp extends DatabaseOp {
                 //updating recipename
                 if(!this.userRecipe.getName().equals(recipe.getString("recipename"))){
                     String updateName = "UPDATE userrecipe "+
-                                        "SET recipename = '" + this.userRecipe.getName() + "' WHERE username = '" + this.username + "';";
+                                        "SET recipename = '" + this.userRecipe.getName() + "' WHERE username = '" + this.username + "' AND recipeid =  "+this.userRecipe.getFoodId() + ";";
                     stmt.executeUpdate(updateName);
                     System.out.println("recipe name updated updated");
                 }
@@ -83,9 +83,8 @@ public class ModifyRecipesOp extends DatabaseOp {
 
                 } */
                //deleting from recipe item table
-               String deleteRecipeItem = "DELETE FROM recipeitem WHERE recipeid = " + this.userRecipe.getFoodId() +";";
+               String deleteRecipeItem = "DELETE FROM recipeitem WHERE recipeid =" + this.userRecipe.getFoodId() +";";
                stmt.executeUpdate(deleteRecipeItem);
-
                 ArrayList<RecipeItem> recipeItemArrayList = this.userRecipe.getIngredients();
                //inserting updated record into recipeitem table
                 for(int i = 0; i < recipeItemArrayList.size(); i++){
