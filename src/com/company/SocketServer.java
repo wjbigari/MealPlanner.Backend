@@ -98,6 +98,15 @@ public class SocketServer extends Thread {
                 consoleString = "logging in for ";
                 databaseOp = new LoginOp(jrequest);
                 break;
+            case "addMeal":
+                consoleString = "adding meal for";
+                databaseOp = new InsertMealHistoryOp(jrequest);
+                break;
+            case "getMealHistory":
+                consoleString = "getting meal history for ";
+                databaseOp = new GetMealHistoryOp(jrequest);
+                break;
+
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;

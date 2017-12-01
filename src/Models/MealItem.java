@@ -14,7 +14,7 @@ public class MealItem {
 	//Fields for qualifying the FoodItem in context of the meal it's in
 	private MealItemContent content;
 	private boolean isLocked;
-	private int numServings;
+	private int numServin gs;
 	private Meal meal;
 
 	//Three available constructors - with the FoodItem and Meal specified; with both plus the Locked state; and with all fields specified
