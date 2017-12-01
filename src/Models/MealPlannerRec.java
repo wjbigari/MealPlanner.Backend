@@ -12,7 +12,6 @@ public class MealPlannerRec {
 	private ArrayList<MealItem> breakfastItems;
 	private ArrayList<MealItem> lunchItems;
 	private ArrayList<MealItem> dinnerItems;
-	
 	private int totalCals;
 	private int totalCarbs;
 	private int totalProt;
