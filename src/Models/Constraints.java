@@ -15,7 +15,7 @@ public class Constraints {
 	private double maxFat;
 	
 	//This constructor sets all fields of the constraints according to the values passed in
-	public Constraints(int calMin, int calMax, int carbMin, int carbMax, int protMin, int protMax, int fatMin, int fatMax){
+	public Constraints(double calMin, double calMax, double carbMin, double carbMax, double protMin, double protMax, double fatMin, double fatMax){
 		minCals = calMin;
 		maxCals = calMax;
 		minCarbs = carbMin;

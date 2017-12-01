@@ -51,7 +51,7 @@ public class Driver {
 
 		//MealItem m_pizza = new MealItem(pizza, MealItem.Meal.LUNCH);
 		MealItem m_pineapple = new MealItem(pineapple, MealItem.Meal.LUNCH);
-		MealItem m_bread = new MealItem(bread, true, 0, MealItem.Meal.LUNCH);	//Locked with 2 servings
+		MealItem m_bread = new MealItem(bread, MealItem.Meal.LUNCH);
 		MealItem m_milk = new MealItem(milk, MealItem.Meal.BREAKFAST);
 		MealItem m_cheese = new MealItem(cheese, MealItem.Meal.DINNER);
 		MealItem m_broccoli = new MealItem(broccoli, MealItem.Meal.DINNER);
@@ -61,18 +61,18 @@ public class Driver {
 		MealItem m_egg = new MealItem(egg, MealItem.Meal.BREAKFAST);
 		MealItem m_yogurt = new MealItem(yogurt, MealItem.Meal.LUNCH);
 		MealItem m_proteinPowder = new MealItem(proteinPowder, MealItem.Meal.BREAKFAST);
-		MealItem m_chicken = new MealItem(chicken, true, 0, MealItem.Meal.DINNER); //Locked with 1 serving
+		MealItem m_chicken = new MealItem(chicken, MealItem.Meal.DINNER);
 		MealItem m_beef = new MealItem(beef, MealItem.Meal.DINNER);
 		MealItem m_almonds = new MealItem(almonds, MealItem.Meal.LUNCH);
 		MealItem m_salmon = new MealItem(salmon, MealItem.Meal.DINNER);
 		MealItem m_pbj = new MealItem(pbj, MealItem.Meal.LUNCH);
 		MealItem m_cheesecake = new MealItem(cheesecake, MealItem.Meal.DINNER);
-		MealItem m_whiskey = new MealItem(whiskey, true, 0, MealItem.Meal.BREAKFAST); //Locked - no num servings specified
+		MealItem m_whiskey = new MealItem(whiskey, MealItem.Meal.BREAKFAST);
 		MealItem m_bacon = new MealItem(bacon, MealItem.Meal.BREAKFAST);
 		MealItem m_gatorade = new MealItem(gatorade, MealItem.Meal.LUNCH);
 		
-		MealItem m_baconEggs = new MealItem(baconEggs, true, 0, MealItem.Meal.BREAKFAST);
-		MealItem m_energyShake = new MealItem(energyShake, true, 0, MealItem.Meal.LUNCH);
+		MealItem m_baconEggs = new MealItem(baconEggs, MealItem.Meal.BREAKFAST);
+		MealItem m_energyShake = new MealItem(energyShake, MealItem.Meal.LUNCH);
 		
 
 		//Food[] foods = {pizza, pineapple, bread, milk};
@@ -86,10 +86,10 @@ public class Driver {
 
 
 		Constraints c = new Constraints(
-				2000, 2100,			//Min Cals, Max Cals
-				150, 170,			//Min Carbs, Max Carbs (in g)
-				150, 170,			//Min Prot, Max Prot  (in g)
-				80, 85);			//Min Fat, Max Fat  (in g)
+				4500, 5000,			//Min Cals, Max Cals
+				400, 450,			//Min Carbs, Max Carbs (in g)
+				400, 450,			//Min Prot, Max Prot  (in g)
+				175, 200);			//Min Fat, Max Fat  (in g)
 
 		MealPlannerRequest request = new MealPlannerRequest(meal, c);
 		//System.out.println(request.toJson().toString(2));
