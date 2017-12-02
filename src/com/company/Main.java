@@ -2,13 +2,14 @@ package com.company;
 import org.json.JSONObject;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Calendar;
 
 
 public class Main {
     public static final int SEARCH_PORT_NUMBER = 8083;
     public static final int MEAL_PORT_NUMBER = 8080;
     public static void main(String[] args) {
-          SearchServer sserver = new SearchServer();
+        SearchServer sserver = new SearchServer();
           MealServer mserver = new MealServer();
 //        System.out.println("SocketServer Example");
 //        ServerSocket server = null;
