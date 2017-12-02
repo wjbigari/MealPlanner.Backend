@@ -19,6 +19,9 @@ public class MealPlanner {
 	private static boolean checkProt = true;
 	private static boolean checkFat = true;
 	private static boolean noLocked = true;
+	//Flag for turning on debug messages
+	private static boolean debugMode = false;
+	public static void setDebugMode(boolean setting){debugMode = setting;}
 	
 	//MAIN HANDLER -- All MealPlannerRequest processing should be run through this function
 	public static MealPlannerRec createMealPlan(MealPlannerRequest request) throws InterruptedException{
@@ -44,6 +47,10 @@ public class MealPlanner {
 		}
 
 		//3. Send the Request's adjusted Constraints and list of MealItems to the main algorithm, get back the adjusted counts
+		if(debugMode){
+			System.out.print(testPointString(adjustedConstraints));
+			if(!verifyDesignPoint(adjustedConstraints)) return null;
+		}
 		ArrayList<MealItem> output = selectMeals(adjustedConstraints, adjustedItems);
 
 		//4. Iterate over the algorithm output list and add non-zero quantity items to the final MealPlannerRec
@@ -59,7 +66,7 @@ public class MealPlanner {
 	//  - if Min is empty but Max is not, set Min to a value slightly smaller than Max
 	//  - if Max is empty but Min is not, set Max to a value slightly larger than Min
 	//  - if either Min or Max is a negative value, set it to 0 (a user explicitly set this field to 0 rather than leaving it blank)
-	private static void initializeConstraints(Constraints con){
+	public static void initializeConstraints(Constraints con){
 		if(con.getMinCals() == 0 && con.getMaxCals() == 0) checkCals = false;
 		else checkCals = true;
 		if(con.getMinCals() == 0) con.setMinCals(con.getMaxCals() * 0.95);
@@ -97,6 +104,41 @@ public class MealPlanner {
 		constraints.setMaxProt(Math.max(constraints.getMaxProt() - (mealItem.getNumServings() * mealItem.getFoodItem().getGramsProtPerServing()), 0));
 		constraints.setMinFat(Math.max(constraints.getMinFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getGramsFatPerServing()), 0));
 		constraints.setMaxFat(Math.max(constraints.getMaxFat() - (mealItem.getNumServings() * mealItem.getFoodItem().getGramsFatPerServing()), 0));
+	}
+	
+	//Debug helper function that tests whether a set of Constraints can be feasibly satisfied and returns false if it cannot
+	private static boolean verifyDesignPoint(Constraints constraints){
+		if(checkCals){
+			double lowCalGoal = constraints.getMinCarbs() * 4 + constraints.getMinProt() * 4 + constraints.getMinFat() * 9;
+			double highCalGoal = constraints.getMaxCarbs() * 4 + constraints.getMaxProt() * 4 + constraints.getMaxFat() * 9;
+			if(constraints.getMaxCals() * 1.05 < lowCalGoal){
+				System.out.print("Skipping test point: Max calorie limit (" + (int)constraints.getMaxCals() + ") cannot be satisfied with these nutrient ranges (minimum possible cals " + (int)lowCalGoal + ")\n\n");
+				return false;
+			}
+			if(checkCarbs && checkProt && checkFat && (constraints.getMinCals() * 0.95 > highCalGoal)){
+				System.out.print("Skipping test point: Min calorie limit (" + (int)constraints.getMinCals() + ") cannot be satisfied with these nutrient ranges (maximum possible cals " + (int)highCalGoal + ")\n\n");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	//Debug helper function that prints a debug message with a representation of the adjusted constraint values
+	private static String testPointString(Constraints constraints){
+		String result = "Testing-- Cals: ";
+		if(!checkCals) result += "any";
+		else result += (int)Math.floor(constraints.getMinCals()) + " to " + (int)Math.floor(constraints.getMaxCals());
+		result += " / Carbs: ";
+		if(!checkCarbs) result += "any";
+		else result += (int)Math.floor(constraints.getMinCarbs()) + " to " + (int)Math.floor(constraints.getMaxCarbs());
+		result += " / Prot: ";
+		if(!checkProt) result += "any";
+		else result += (int)Math.floor(constraints.getMinProt()) + " to " + (int)Math.floor(constraints.getMaxProt());
+		result += " / Fat: ";
+		if(!checkFat) result += "any";
+		else result += (int)Math.floor(constraints.getMinFat()) + " to " + (int)Math.floor(constraints.getMaxFat());
+		result += "\n";
+		return result;
 	}
 	
 	//Helper method to set the terms of the simulated annealing function according to Constraints and number of MealItems
@@ -172,7 +214,7 @@ public class MealPlanner {
 			}
 		}
 		long endTime = System.currentTimeMillis();
-		System.out.print("Run complete in " + (endTime - startTime) + " ms\nBest dish fitness: " + lowestOverallCost + "\n\n");
+		if(debugMode) System.out.print("Run complete in " + (endTime - startTime) + " ms\nBest dish fitness: " + lowestOverallCost + "\n");
 		return result;
 	}
 	
