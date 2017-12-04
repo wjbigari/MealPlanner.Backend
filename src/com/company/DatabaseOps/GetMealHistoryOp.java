@@ -101,10 +101,13 @@ public class GetMealHistoryOp extends DatabaseOp {
                             tempMealItem = new MealItem(tempItem, true, (int) mealItemSet.getFloat("amount"), meal);
                             mealPlannerTemp.addItemToRec(tempMealItem);
                         }
+                        foodItemCon.close();
                     }
+                    mealItemCon.close();
                     mealPlanList.put("" + rs.getInt(2), mealPlannerTemp.toJson().toString());
                 }
             }
+            con.close();
             responseObject.put("mealList", mealPlanList.toString());
         }
     }

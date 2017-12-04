@@ -68,6 +68,7 @@ public class InsertMealHistoryOp extends DatabaseOp {
         insertMealtoDatabase(breakfast,con);
         insertMealtoDatabase(lunch, con);
         insertMealtoDatabase(dinner, con);
+        con.close();
     }
 
     private void insertMealtoDatabase(ArrayList<MealItem> meal, Connection con) throws SQLException {
