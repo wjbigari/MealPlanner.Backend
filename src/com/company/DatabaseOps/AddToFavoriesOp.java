@@ -31,9 +31,9 @@ public class AddToFavoriesOp extends DatabaseOp {
 
         try{
             if(isrecipe){
-                storeFoodItem();
-            }else{
                 storeRecipe();
+            }else{
+                storeFoodItem();
             }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -47,25 +47,52 @@ public class AddToFavoriesOp extends DatabaseOp {
         Class.forName("com.mysql.jdbc.Driver");
         //Open a connection
         ResultSet rs;
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
-        try (PreparedStatement ps = con.prepareStatement("INSERT INTO favtfood(username, foodid) VALUES( ?,?);")){
+        Connection con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
+        try (PreparedStatement ps = con1.prepareStatement("SELECT * FROM favtfood WHERE username = ? AND foodid= ?;")){
             ps.setString(1, username);
             ps.setInt(2, mealItem.getFoodId());
-            ps.executeUpdate();
-            responseObject.put("response", "added FoodIngredient: " + mealItem.getName() + " to "+ username+"'s favorites successfully");
+            rs = ps.executeQuery();
+            if(!rs.next()){
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
+                try (PreparedStatement ps1 = con.prepareStatement("INSERT INTO favtfood(username, foodid) VALUES( ?,?);")){
+                    ps1.setString(1, username);
+                    ps1.setInt(2, mealItem.getFoodId());
+                    ps1.executeUpdate();
+                    responseObject.put("response", "added " + mealItem.getName() + " to "+ username+"'s favorites successfully");
 
+                }
+                con.close();
+            }else{
+                responseObject.put("response", mealItem.getName() + " is already one of "+ username+"'s favorite food items");
+            }
         }
+        con1.close();
+
     }
 
     private void storeRecipe() throws ClassNotFoundException, SQLException {
         Class.forName("com.mysql.jdbc.Driver");//Open a connection
         ResultSet rs;
-        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
-        try (PreparedStatement ps = con.prepareStatement("INSERT INTO favtrecipe(username, recipeid) VALUES( ?,?);")){
+        Connection con1 = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
+        try (PreparedStatement ps = con1.prepareStatement("SELECT * FROM favtrecipe WHERE username = ? AND recipeid = ?;")){
             ps.setString(1, username);
             ps.setInt(2, recipe.getFoodId());
-            ps.executeUpdate();
-            responseObject.put("response", "added Recipe: " + recipe.getName() + " to "+ username+"'s favorites successfully");
+            rs = ps.executeQuery();
+            if(!rs.next()){
+                Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root");
+                try (PreparedStatement ps1 = con.prepareStatement("INSERT INTO favtrecipe(username, recipeid) VALUES( ?,?);")){
+                    ps1.setString(1, username);
+                    ps1.setInt(2, recipe.getFoodId());
+                    ps1.executeUpdate();
+                    responseObject.put("response", "added " + recipe.getName() + " to "+ username+"'s favorites successfully");
+                }
+                con.close();
+            }else{
+                responseObject.put("response", recipe.getName() + " is already one of "+ username+"'s favorite recipes");
+            }
+            con1.close();
         }
+
+
     }
 }
