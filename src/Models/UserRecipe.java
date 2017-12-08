@@ -137,6 +137,7 @@ public class UserRecipe implements Serializable, MealItemContent {
     public double getInternalCoefficient() {
         return internalCoefficient;
     }
+    public String getPortionName(){return this.portionName;}
 
     //Setters
     public void setInternalCoefficient(double d)

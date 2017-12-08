@@ -40,7 +40,7 @@ public class ModifyRecipesOp extends DatabaseOp {
 
             //modifying from userrecipe table
             stmt1 = con.createStatement();
-            String selectRecipe = "SELECT recipeid, username, recipename, instructions, numPortions FROM userrecipe " +
+            String selectRecipe = "SELECT recipeid, username, recipename, instructions, numPortions, servingUnit FROM userrecipe " +
                                    "WHERE recipeid = " + this.userRecipe.getFoodId() + " AND username = '" + this.username + "' ;";
             ResultSet recipe = stmt1.executeQuery(selectRecipe);
 
@@ -67,6 +67,13 @@ public class ModifyRecipesOp extends DatabaseOp {
                 if(!this.userRecipe.getName().equals(recipe.getString("recipename"))){
                     String updateName = "UPDATE userrecipe "+
                                         "SET recipename = '" + this.userRecipe.getName() + "' WHERE username = '" + this.username + "' AND recipeid =  "+this.userRecipe.getFoodId() + ";";
+                    stmt.executeUpdate(updateName);
+                    System.out.println("recipe name updated updated");
+                }
+
+                if(!this.userRecipe.getPortionName().equals(recipe.getString("servingUnit"))){
+                    String updateName = "UPDATE userrecipe "+
+                            "SET servingUnit= '" + this.userRecipe.getPortionName() + "' WHERE username = '" + this.username + "' AND recipeid =  "+this.userRecipe.getFoodId() + ";";
                     stmt.executeUpdate(updateName);
                     System.out.println("recipe name updated updated");
                 }
