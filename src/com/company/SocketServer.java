@@ -110,6 +110,10 @@ public class SocketServer extends Thread {
                 consoleString = "adding meal item to favorites for ";
                 databaseOp = new AddToFavoriesOp(jrequest);
                 break;
+            case "getFavorites":
+                consoleString = "getting favorites for ";
+                databaseOp = new GetFavoritesOp(jrequest);
+                break;
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;

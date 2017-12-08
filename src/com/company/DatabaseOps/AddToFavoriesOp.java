@@ -85,10 +85,12 @@ public class AddToFavoriesOp extends DatabaseOp {
                     ps1.setInt(2, recipe.getFoodId());
                     ps1.executeUpdate();
                     responseObject.put("response", "added " + recipe.getName() + " to "+ username+"'s favorites successfully");
+                    responseObject.put("success", true);
                 }
                 con.close();
             }else{
                 responseObject.put("response", recipe.getName() + " is already one of "+ username+"'s favorite recipes");
+                responseObject.put("success", false);
             }
             con1.close();
         }

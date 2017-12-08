@@ -18,6 +18,7 @@ public class FoodItem implements MealItemContent {
 	private double gramsFatPerServing;
 	//Part of the balancing algorithm - not for use outside the MealPlanner
 	private double internalCoefficient;
+	private boolean favorite = false;
 
 
 	//Constructors - any fields that are not explicitly set will be set to default values
@@ -72,6 +73,7 @@ public class FoodItem implements MealItemContent {
         this.gramsProtPerServing = fromObject.optDouble("gramsProtPerServing");
         this.gramsFatPerServing = fromObject.optDouble("gramsFatPerServing");
         this.internalCoefficient = fromObject.optDouble("internalCoefficient");
+        this.favorite = fromObject.getBoolean("favorite");
     }
 
 	//Getters
@@ -151,7 +153,7 @@ public class FoodItem implements MealItemContent {
 	public void setInternalCoefficient(double coefficient) {
 		this.internalCoefficient = coefficient;
 	}
-
+	public void setFavorite(){favorite = true;}
 	//Derived Getters - returns a useful modifier over or combination of fields
 	public long getCalsCarbPerServing(){return (long)(this.getGramsCarbPerServing() * 4);}
 	public long getCalsProtPerServing(){return (long)(this.getGramsProtPerServing() * 4);}
@@ -170,6 +172,7 @@ public class FoodItem implements MealItemContent {
         returnObject.put("gramsFatPerServing", this.gramsFatPerServing);
         returnObject.put("gramsProtPerServing", this.gramsProtPerServing);
         returnObject.put("internalCoefficient", this.internalCoefficient);
+		returnObject.put("favorite", this.favorite);
         return returnObject;
     }
     

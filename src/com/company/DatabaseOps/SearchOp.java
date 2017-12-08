@@ -7,8 +7,10 @@ import org.json.JSONObject;
 import java.sql.*;
 
 public class SearchOp extends DatabaseOp{
+    private String username;
     public SearchOp(JSONObject jObject){
         super(jObject);
+        this.username = jObject.getString("username");
     }
 
     @Override
@@ -19,6 +21,8 @@ public class SearchOp extends DatabaseOp{
         System.out.println("searching for request: " + request + ".");
         String content=null, info=null,sname=null;
         double cals,carbs,prots,fats, samount;
+        Connection con2 = null;
+        ResultSet rs1;
         Statement stmt = null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
@@ -28,6 +32,7 @@ public class SearchOp extends DatabaseOp{
             String query = "select foodid,contents, cals,carbs,prots, fats, minservamt, servingname from ingredients where contents LIKE '%" + request + "%' LIMIT 5;";
             stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(query);
+
             while(rs.next()) {
                 id = rs.getInt("foodid");
                 content = rs.getString("contents");
@@ -38,14 +43,21 @@ public class SearchOp extends DatabaseOp{
                 fats = rs.getDouble("fats");
                 samount = Double.parseDouble(rs.getString("minservamt"));
                 sname = rs.getString("servingname");
-
-
                 FoodItem i1 = new FoodItem(content, id, (int)samount, sname, (int)cals,carbs,prots, fats);
-                System.out.println("adding food item " + content + "to list.");
-                JSONObject obj1 = i1.toJson();
-                System.out.println(i1.toString());
-                searchArray.put(obj1.toString());
 
+                try (PreparedStatement ps1 = con.prepareStatement("SELECT * FROM favtfood WHERE username = ? AND foodid = ?;")){
+                    ps1.setString(1, username);
+                    ps1.setInt(2, id);
+                    rs1 = ps1.executeQuery();
+                    if(rs1.next()){
+                        i1.setFavorite();
+                    }
+                    System.out.println("adding food item " + content + "to list.");
+                    JSONObject obj1 = i1.toJson();
+                    System.out.println(i1.toString());
+                    searchArray.put(obj1.toString());
+
+                }
 
             }
         }
