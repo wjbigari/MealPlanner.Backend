@@ -6,6 +6,9 @@ import junit.framework.TestCase;
 
 import java.util.ArrayList;
 
+/*
+ * DEPRECATED:  Use MealPlannerParameterizedTest instead for dynamic test case creation capability  ~NBB
+ */
 
 public class MealPlannerTest extends TestCase{
 	//Factors
@@ -90,106 +93,6 @@ public class MealPlannerTest extends TestCase{
 		}
 	}
 	
-//	public void testLo() throws InterruptedException{
-//		request = this.setUpDesignPoint(loCal, loCal, loCarb, loCarb, loProt, loProt, loFat, loFat);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);		
-//	}
-//	
-//	public void testHi() throws InterruptedException{
-//		request = this.setUpDesignPoint(hiCal, hiCal, hiCarb, hiCarb, hiProt, hiProt, hiFat, hiFat);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);		
-//	}
-//	
-//	public void testRange() throws InterruptedException{
-//		request = this.setUpDesignPoint(loCal, hiCal, loCarb, hiCarb, loProt, hiProt, loFat, hiFat);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);
-//	}
-//	
-//	public void testCals() throws InterruptedException{
-//		for(int calLevel : cals){
-//			request = this.setUpDesignPoint(calLevel, calLevel, 0, 0, 0, 0, 0, 0);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//		}
-//	}
-//	
-//	public void testCalsRange() throws InterruptedException{
-//		request = this.setUpDesignPoint(loCal, hiCal, 0, 0, 0, 0, 0, 0);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);
-//	}
-//	
-//	public void testCarbs() throws InterruptedException{
-//		for(int carbLevel : carbs){
-//			request = this.setUpDesignPoint(0, 0, carbLevel, carbLevel, 0, 0, 0, 0);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//
-//		}		
-//	}
-//	
-//	public void testCarbsOnly() throws InterruptedException{
-//		for(int carbLevel : carbs){
-//			request = this.setUpDesignPoint(0, 0, carbLevel, carbLevel, -1, -1, -1, -1);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//
-//		}	
-//	}
-//	
-//	public void testCarbRange() throws InterruptedException{
-//		request = this.setUpDesignPoint(0, 0, loCarb, hiCarb, 0, 0, 0, 0);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);
-//	}
-//	
-//	public void testProt() throws InterruptedException{
-//		for(int protLevel : prot){
-//			request = this.setUpDesignPoint(0, 0, 0, 0, protLevel, protLevel, 0, 0);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//		}		
-//	}
-//	
-//	public void testProtOnly() throws InterruptedException{
-//		for(int protLevel : prot){
-//			request = this.setUpDesignPoint(0, 0, -1, -1, protLevel, protLevel, -1, -1);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//		}	
-//	}
-//	
-//	public void testProtRange() throws InterruptedException{
-//		request = this.setUpDesignPoint(0, 0, 0, 0, loProt, hiProt, 0, 0);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);
-//	}
-//	
-//	public void testFat() throws InterruptedException{
-//		for(int fatLevel : fat){
-//			request = this.setUpDesignPoint(0, 0, 0, 0, 0, 0, fatLevel, fatLevel);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//		}		
-//	}
-//	
-//	public void testFatOnly() throws InterruptedException{
-//		for(int fatLevel : fat){
-//			request = this.setUpDesignPoint(0, 0, -1, -1, -1, -1, fatLevel, fatLevel);
-//			System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//			this.verifyDesignPoint(request);
-//		}
-//	}
-//	
-//	public void testFatRange() throws InterruptedException{
-//		request = this.setUpDesignPoint(0, 0, 0, 0, 0, 0, loFat, hiFat);
-//		System.out.println("Testing design point: " + constraints.getMinCals() + "/" + constraints.getMaxCals() + "/" + constraints.getMinCarbs() + "/" + constraints.getMaxCarbs() + "/" + constraints.getMinProt() + "/" + constraints.getMaxProt() + "/" + constraints.getMinFat() + "/" + constraints.getMaxFat());
-//		this.verifyDesignPoint(request);
-//	}
-//	
 	//Helper method - sets up the MealPlannerRequest with the proper initial values for this design point
 	private MealPlannerRequest setUpDesignPoint(int minCal, int maxCal, int minCarb, int maxCarb, int minProt, int maxProt, int minFat, int maxFat){
 		constraints = new Constraints(minCal, maxCal, minCarb, maxCarb, minProt, maxProt, minFat, maxFat);
