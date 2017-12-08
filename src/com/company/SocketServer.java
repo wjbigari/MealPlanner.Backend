@@ -114,6 +114,9 @@ public class SocketServer extends Thread {
                 consoleString = "getting favorites for ";
                 databaseOp = new GetFavoritesOp(jrequest);
                 break;
+            case "deleteFavorite":
+                consoleString = "deleting from favorites for ";
+                databaseOp = new DeleteFavoriteOp(jrequest);
         }
         System.out.println(consoleString + socket.getInetAddress().getHostAddress());
         return databaseOp;
