@@ -143,7 +143,7 @@ public class MealPlanner {
 	
 	//Helper method to set the terms of the simulated annealing function according to Constraints and number of MealItems
 	private static void setGlobalVariables(int foodCount, Constraints c) {
-		totalRuns = (int)(250 - (Math.pow(foodCount, 2) * 0.1) - ((c.getMaxCals() + c.getMinCals())/100));
+		totalRuns = (int)(300 - (Math.pow(foodCount, 2) * 0.1) - ((c.getMaxCals() + c.getMinCals())/100));
 		if (totalRuns < 30) totalRuns = 30;
 		multiplier = 0.997 - (Math.pow(foodCount, 2) * 0.000025) - ((c.getMaxCals() + c.getMinCals())/750000);
 		if (multiplier < 0.8) multiplier = 0.8;
@@ -165,7 +165,7 @@ public class MealPlanner {
 			double lowestCost = Double.MAX_VALUE;
 			//Repeatedly loop while lowering the temperature to select the best dish for this run
 			double temp = 1.0;
-			while(temp >= 0.05){
+			while(temp >= 0.05 && lowestCost > 5.0){
 				temp *= multiplier;
 				neighbors = getNeighbors(currentDish);
 				//Pick a random value [0...1] - if the random value is lower than the current temperature,
@@ -188,7 +188,7 @@ public class MealPlanner {
 			}
 			//Finish by performing a hill climb to the local optimum for the fitness function
 			boolean hillClimb = true;
-			while(hillClimb){
+			while(hillClimb && lowestCost > 5.0){
 				hillClimb = false;
 				neighbors = getNeighbors(currentDish);
 				for(MealConfig neighbor : neighbors){
@@ -205,6 +205,10 @@ public class MealPlanner {
 				bestDish = currentDish;
 				lowestOverallCost = lowestCost;
 			}
+			//Stop the loop if the total duration of the search across all runs is greater than 2.75 seconds
+			long currentTime = System.currentTimeMillis();
+			if((currentTime - startTime) > 2750) break;
+			if(lowestOverallCost <= 5.0) break;
 		}
 		//Return with the best overall dish from among all of the runs
 		ArrayList<MealItem> result = new ArrayList<>();
@@ -320,12 +324,12 @@ public class MealPlanner {
 					totalFat += item.getFoodItem().getCalsFatPerServing() * serv;
 				}
 			}
-			minCalsCarb = c.getMinCarbs() * 4;
-			maxCalsCarb = c.getMaxCarbs() * 4;
-			minCalsProt = c.getMinProt() * 4;
-			maxCalsProt = c.getMaxProt() * 4;
-			minCalsFat = c.getMinFat() * 9;
-			maxCalsFat = c.getMaxFat() * 9;
+			minCalsCarb = Math.max(c.getMinCarbs(), 0) * 4;
+			maxCalsCarb = Math.max(c.getMaxCarbs(), 0) * 4;
+			minCalsProt = Math.max(c.getMinProt(), 0) * 4;
+			maxCalsProt = Math.max(c.getMaxProt(), 0) * 4;
+			minCalsFat = Math.max(c.getMinFat(), 0) * 9;
+			maxCalsFat = Math.max(c.getMaxFat(), 0) * 9;
 		}
 		
 		//Returns a single-level deep clone of this MealConfig (having duplicate pointers to MealItemContent is okay since it isn't being changed)
@@ -429,35 +433,34 @@ public class MealPlanner {
 			//Add a penalty multiplier for item diversity - penalize more than 5 servings of any particular item
 			for(int i = 0; i < items.length; ++i){
 				if(items[i].getNumServings() > 5){
-					for(int j = 0; j < items[i].getNumServings() - 5; ++j) fitness = (fitness + 0.1) * 1.05;
+					for(int j = 0; j < items[i].getNumServings() - 5; ++j) fitness = (fitness + 1) * (1 + .5/(totalServings + 1));
 				}
-			}			
+			}
 			
 			//Add a penalty multiplier for food diversity - penalize anything outside the range of 6-10 unique food items
 			int diversity = Math.abs(numItems - 8);
 			if(diversity > 2){
-				for(int i = 0; i < diversity; ++i) fitness = (fitness + 0.1) * 1.05;
+				for(int i = 0; i < diversity; ++i) fitness = (fitness + 1) * (1 + 1/(totalServings + 1));
 			}
 			
 			//Add a penalty multiplier for meal diversity - goal is for each meal to be within 2 servings of 1/3rd of the total servings
 			int goalServs = totalServings / 3;
 			int breakDiff = Math.abs(goalServs - numBreakServ);
 			if(breakDiff > 2){
-				for(int i = 0; i < breakDiff; ++i) fitness = (fitness + 0.1) * 1.05;
+				for(int i = 0; i < breakDiff; ++i) fitness = (fitness + 1) * (1 + 1/(totalServings + 1));
 			}
 			int lunchDiff = Math.abs(goalServs - numLunchServ);
 			if(lunchDiff > 2){
-				for(int i = 0; i < lunchDiff; ++i) fitness = (fitness + 0.1) * 1.05;
+				for(int i = 0; i < lunchDiff; ++i) fitness = (fitness + 1) * (1 + 1/(totalServings + 1));
 			}
 			int dinnerDiff = Math.abs(goalServs - numDinnerServ);
 			if(dinnerDiff > 2){
-				for(int i = 0; i < dinnerDiff; ++i) fitness = (fitness + 0.1) * 1.05;
+				for(int i = 0; i < dinnerDiff; ++i) fitness = (fitness + 1) * (1 + 1/(totalServings + 1));
 			}
-			
 			//Add a tremendously large penalty for any Locked item that has 0 total servings
 			if(!noLocked){
 				for(int i = 0; i < items.length; ++i){
-					if(items[i].isLocked() && items[i].getNumServings() == 0) fitness += (Double.MAX_VALUE / 30);
+					if(items[i].isLocked() && items[i].getNumServings() == 0) fitness += (Double.MAX_VALUE / 60);
 				}
 			}
 			

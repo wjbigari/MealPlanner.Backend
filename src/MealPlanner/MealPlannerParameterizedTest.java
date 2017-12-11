@@ -53,10 +53,10 @@ public class MealPlannerParameterizedTest {
 	@Parameters
 	public static Collection<Object[]> data(){
 		//Levels for each of the four main factors -- note -1 represents an explicit '0' in the field, whereas 0 represents a blank field
-		int[] calLevels = {-1, 0, 1000, 5000};
-		int[] carbLevels = {-1, 0, 75, 375};
-		int[] protLevels = {-1, 0, 75, 375};
-		int[] fatLevels = {-1, 0, 45, 225};
+		int[] calLevels = {-1, 0, 1000, 3000};
+		int[] carbLevels = {-1, 0, 75, 225};
+		int[] protLevels = {-1, 0, 75, 225};
+		int[] fatLevels = {-1, 0, 45, 135};
 		//Populate the set of design points by using every combination of valid nutrient ranges
 		// e.g. [1000-3000 cals, 0-75g carbs, 75-75g prot, 225-225g fat] would represent one design point
 		// With the levels as listed above this will generate 10000 distinct design points
@@ -106,6 +106,7 @@ public class MealPlannerParameterizedTest {
 	private static FoodItem pfTest = new FoodItem("prot-fat", 6, 1, "serving(s)", 68, 0, 8, 4);
 	
 	//Global fields for design point testing
+	private static int numInvalidTests = 0;
 	private ArrayList<MealItem> testMeal;
 	private Constraints constraints;
 	private boolean ignoreCals;
@@ -116,6 +117,7 @@ public class MealPlannerParameterizedTest {
 	@BeforeClass
 	public static void setUp(){
 		MealPlanner.setDebugMode(true);
+		numInvalidTests = 0;
 	}
 	
 	@Test
@@ -126,7 +128,11 @@ public class MealPlannerParameterizedTest {
 		MealPlannerRec response = MealPlanner.createMealPlan(request);
 		long endTime = System.currentTimeMillis();
 		
-		if(response == null) return; //MealPlanner is set to return a null MealPlannerRec if it is in debug mode and the parameters are invalid
+		//MealPlanner is set to return a null MealPlannerRec if it is in debug mode and the parameters are invalid
+		if(response == null){
+			numInvalidTests++;
+			return; 
+		}
 		System.out.print("Best dish-- Cals: " + response.getTotalCals() + " / Carbs: " + response.getTotalCarbs() + " / Prot: " + response.getTotalProt() + " / Fat: " + response.getTotalFat() + "\n");
 		
 		//Verify that the design point completed in a timely manner
@@ -210,5 +216,6 @@ public class MealPlannerParameterizedTest {
 	@AfterClass
 	public static void tearDown(){
 		MealPlanner.setDebugMode(false);
+		System.out.println("Total number of design points not evaluated due to incompatible constraint parameters: " + numInvalidTests);
 	}
 }
