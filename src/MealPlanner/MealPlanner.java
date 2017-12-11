@@ -38,7 +38,7 @@ public class MealPlanner {
 		noLocked = true;
 		for(MealItem item : request.getMealItems()){
 			if(item.isLocked() && item.getNumServings() > 0){
-				handleLockedQuantity(item, request.getConstraints());
+				handleLockedQuantity(item, adjustedConstraints);
 				result.addItemToRec(item);
 			}else{
 				if(item.isLocked() && item.getNumServings() == 0) noLocked = false;
@@ -152,6 +152,7 @@ public class MealPlanner {
 	public static ArrayList<MealItem> selectMeals(Constraints c, ArrayList<MealItem> meal_Items) throws InterruptedException{
 		long startTime = System.currentTimeMillis();
 		MealItem[] items = new MealItem[meal_Items.size()];
+		if(items.length == 0) return new ArrayList<MealItem>(); //For cases where all meal pools are empty or every item is locked with quantity
 		for(int i = 0; i < items.length; ++i) items[i] = meal_Items.get(i);
 		setGlobalVariables(items.length, c);
 		
