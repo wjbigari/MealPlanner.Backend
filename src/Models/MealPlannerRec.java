@@ -16,7 +16,7 @@ public class MealPlannerRec {
 	private int totalCarbs;
 	private int totalProt;
 	private int totalFat;
-	
+
 	//Empty constructor creates a blank recommendation with no statistics
 	public MealPlannerRec(){
 		breakfastItems = new ArrayList<>();
@@ -39,7 +39,7 @@ public class MealPlannerRec {
 		this();
 		this.fromJson(recJson);
 	}
-	
+
 	//Getters
 	public int getTotalCals(){return this.totalCals;}
 	public int getTotalCarbs(){return this.totalCarbs;}
@@ -48,7 +48,7 @@ public class MealPlannerRec {
 	public ArrayList<MealItem> getBreakfastItems(){return this.breakfastItems;}
 	public ArrayList<MealItem> getLunchItems(){return this.lunchItems;}
 	public ArrayList<MealItem> getDinnerItems(){return this.dinnerItems;}
-	
+
 	//Helper method for adding a MealItem to this MealPlanner recommendation
 	public void addItemToRec(MealItem item){
 		if(item.getNumServings() > 0){
@@ -70,7 +70,7 @@ public class MealPlannerRec {
 		}
 	}
 
-	
+
 	//JSON serialization and de-serialization functions
 	public JSONObject toJson() throws JSONException{
 		JSONObject out = new JSONObject();
@@ -98,7 +98,7 @@ public class MealPlannerRec {
 		out.put("totalFat", this.totalFat);
 		return out;
 	}
-	
+
 	public void fromJson(JSONObject in) throws JSONException{
 		this.breakfastItems.clear();
 		this.lunchItems.clear();
@@ -126,7 +126,7 @@ public class MealPlannerRec {
 		this.totalProt = in.optInt("totalProt");
 		this.totalFat = in.optInt("totalFat");
 	}
-	
+
 	//toString function to help with visualization of the structure of a meal recommendation
 	@Override
 	public String toString(){

@@ -60,15 +60,16 @@ public class InsertMealHistoryOp extends DatabaseOp {
             rs = ps.getGeneratedKeys();
             rs.next();
             mealid = rs.getInt(1);
+            ArrayList<MealItem> breakfast = mealPlan.getBreakfastItems();
+            ArrayList<MealItem> lunch= mealPlan.getLunchItems();
+            ArrayList<MealItem> dinner = mealPlan.getDinnerItems();
+            insertMealtoDatabase(breakfast,DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root"));
+            insertMealtoDatabase(lunch, DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root"));
+            insertMealtoDatabase(dinner, DriverManager.getConnection("jdbc:mysql://localhost:3306/mealplanner", "root", "root"));
+            con.close();
         }
 
-        ArrayList<MealItem> breakfast = mealPlan.getBreakfastItems();
-        ArrayList<MealItem> lunch= mealPlan.getLunchItems();
-        ArrayList<MealItem> dinner = mealPlan.getDinnerItems();
-        insertMealtoDatabase(breakfast,con);
-        insertMealtoDatabase(lunch, con);
-        insertMealtoDatabase(dinner, con);
-        con.close();
+
     }
 
     private void insertMealtoDatabase(ArrayList<MealItem> meal, Connection con) throws SQLException {
