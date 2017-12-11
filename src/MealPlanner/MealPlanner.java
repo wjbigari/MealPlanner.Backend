@@ -228,11 +228,14 @@ public class MealPlanner {
 	//  and if all fields are set to open range or have a 0 min/max the configuration will correctly return with nothing in the MealConfig
 	public static MealConfig generateRandomMeal(MealItem[] items, Constraints c) {
 		MealConfig config = new MealConfig(c, items);
+		int count = 0;
 		while((checkCals && config.totalCals < ((c.getMinCals() + c.getMaxCals()) / 2))
 				|| (checkCarbs && config.totalCarbs < ((config.minCalsCarb + config.maxCalsCarb) / 2))
 				|| (checkProt && config.totalProt < ((config.minCalsProt + config.maxCalsProt) / 2))
 				|| (checkFat && config.totalFat < ((config.minCalsFat + config.maxCalsFat) / 2))){
+			if (count > 30) break;
 			config.addItem(ThreadLocalRandom.current().nextInt(items.length));
+			count++;
 		}
 		return config;
 	}
